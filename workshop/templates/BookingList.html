@@ -1,0 +1,86 @@
+{% if mssg %}
+<script>
+    alert('{{mssg}}');
+</script>
+{% endif %}<!doctype html>
+<html lang="en">
+<head></head>
+  
+   <!-- Required meta tags -->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+   <h1 class="p-3 mb-2 bg-success text-white text-center">iGROW Knowledge Management System</h1>
+
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+   <b>
+    <div>
+        <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist" >
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="{% url 'HomeAdmin' %}" role="tab" aria-controls="home" aria-selected="true">Home</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="sharing-tab" data-bs-toggle="tab" href="{% url 'UserList' %}" role="tab" aria-controls="sharing" aria-selected="true">User</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="discussion-tab" data-bs-toggle="tab" href="{% url 'GroupAdmin' %}" role="tab" aria-controls="discussion" aria-selected="true">Group</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="discussion-tab" data-bs-toggle="tab" href="{% url 'BookingList' %}" role="tab" aria-controls="discussion" aria-selected="true">Booking</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="workshop-tab" data-bs-toggle="tab" href="{% url 'Workshop' %}" role="tab" aria-controls="workshop" aria-selected="true">Workshop</a>
+           </li>
+          </li>
+        </ul>
+      </div>
+   </b>
+  <br/>
+ <br/>
+    <p class="h4 text-center">Workshop</p>
+    <br/>
+    {% csrf_token %}
+    {% block body %}
+  
+    {% for booking in booking %}
+  <form action="{% url 'deleteBooking' booking.id  %}" method="POST" class="center">
+    {% endfor %}
+    {% csrf_token %}
+    <div class="container">
+      
+      <br/><br/>
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">UserList</th>
+              <th scope="col">Progamme Name</th>
+              <th scope="col">Date</th>
+              <th scope="col">Session</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for booking in booking %}
+            <tr class="table">
+              <th scope="row" value="{{ booking.Person_fk.Username }}">{{ booking.Person_fk.Username }}</th>
+              <th scope="row" value="{{ booking.ProgrammeName }}">{{ booking.ProgrammeName }}</th>
+              <th scope="row" value="{{ booking.Date }}">{{ booking.Date }}</th>
+              <th scope="row" value="{{ booking.Session }}">{{ booking.Session }}</th>
+              <td>
+                <button type="delete" class="btn btn-success" value="Delete">Delete</button>
+              </td>
+              {% endfor %}
+            </tr>
+           
+          </tbody>
+        </table>
+       
+  </div>
+</form>
+{% endblock body %}
+</html>

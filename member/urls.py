@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from django.conf.urls import url, include
+from django.urls import re_path as url, include
 #from LOGIN import views
 from django.contrib import admin
 from django.conf import settings
@@ -30,7 +30,6 @@ from member.api import UserAuthentication, UserList
 #from LOGIN.views import UserReg, sharing, discussion, view, workshop, booking, member
 from .import views
 from .import api
-from django.conf.urls import url
 # from .import index
 #from member import views
 #from rest_framework import routers
@@ -74,7 +73,9 @@ urlpatterns = [
     path('EditGroupSharing.html/<str:fk1>/',views.updateGroupSharing, name="UpdateGroupSharing"),
     path('DeleteGroupSharing.html/<str:fk1>/', views.deleteGroupSharing, name="DeleteGroupSharing"),
     
-
+    path('MainMarketplace.html',views.mainMarketplace, name="MainMarketplace"),
+    path('SellProduct.html/<str:fk1>/',views.sellProduct, name="SellProduct"),
+    
     path('MainMember.html', views.mainMember, name="MainMember"),
     path('member.html',views.member, name="member"),
     path('friendlist.html',views.friendlist, name="friendlist"),

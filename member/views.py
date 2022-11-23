@@ -25,44 +25,20 @@ from group.models import Group, GroupMember, GroupSharing
 from .models import Person
 from member.models import Member
 from sharing.models import Feed
+from marketplace.models import MarketplaceFeed
 from rest_framework.permissions import AllowAny
 from member.serializers import MyTokenObtainPairSerializer, UsersSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-import requests
+# import requests
 #from member.models import Users 
 from .serializers import UsersSerializer
-import pyrebase 
+# import pyrebase 
 from django.contrib import auth
 from getpass import getpass
 from rest_framework import viewsets
 import json
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
 
 from member import serializers
-
-cred = credentials.Certificate('member\serviceAccountKey.json')
-firebase_admin.initialize_app(cred)
-
-db = firestore.client()
-
-firebaseConfig={
-
-    "apiKey": "AIzaSyDHx0RR2nsDiJECbaP4DpLpejjqutLPN34",
-    "authDomain": "i-grow-kmma.firebaseapp.com",
-    "projectId": "i-grow-kmma",
-    "databaseURL": "xxxxxxxx",
-    "storageBucket": "i-grow-kmma.appspot.com",
-    "messagingSenderId": "426593032564",
-    "appId": "1:426593032564:web:37f2948f17ae0cde6fb421",
-    "measurementId": "G-Z1JJD88MCZ"
-}
-
-firebase = pyrebase.initialize_app(firebaseConfig)
-
-authe = firebase.auth()
-database=firebase.database()
  
 def encryptPassword(Pwd):
          key = Fernet.generate_key()
@@ -678,3 +654,66 @@ def deleteBooking(request,fk1):
       #      return token
 
 
+#marketplace
+# def mainMarketplace(request):
+#     try:
+#         marketplace=MarketplaceFeed.objects.all()
+#         return render(request,'MainMarketplace.html',{'marketplace':marketplace})
+#     except MarketplaceFeed.DoesNotExist:
+#         raise Http404('Data does not exist')
+    
+def mainMarketplace(request):
+    try:
+        marketplace=MarketplaceFeed.objects.all()
+        person = Person.objects.filter(Email=request.session['Email'])
+        user=Person.objects.all()
+        return render(request,'MainMarketplace.html',{'marketplace':marketplace, 'person':person, 'user':user, 'sharing':sharing})
+    except MarketplaceFeed.DoesNotExist:
+        raise Http404('Data does not exist')
+
+# def sellProduct(request):
+#     if request.method=='POST':
+#         Title=request.POST.get('Title')
+#         Message=request.POST.get('Message')
+#         Photo=request.POST.get('Photo')
+#         Video=request.POST.get('Video')
+#         #person = Person.objects.filter(Email=request.session['id'])
+#         #Graph=request.POST.get('Graph')
+#         Feed(Title=Title,Message=Message,Photo=Photo,Video=Video).save(),
+#         messages.success(request,'The new feed is save succesfully..!')
+
+#         #data={
+#         #    u'title': Title,
+#         #    u'message':Message,
+#         #    u'photo':Photo,
+#         #    u'video':Video,
+
+#         #}
+#         #db.collection(u'sharing').document().set(data)
+#         return render(request,'SellProduct.html')
+#     else :
+#         return render(request,'SellProduct.html')
+    
+def sellProduct(request, fk1):
+    person = Person.objects.get(pk=fk1)
+    if request.method=='POST':
+        Title=request.POST.get('Title')
+        Message=request.POST.get('Message')
+        Photo=request.POST.get('Photo')
+        Video=request.POST.get('Video')
+        f = Person.objects.get(pk=fk1)
+        #Graph=request.POST.get('Graph')
+        MarketplaceFeed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
+        messages.success(request,'The new feed is save succesfully..!')
+
+        #data={
+        #    u'title': Title,
+        #    u'message':Message,
+        #    u'photo':Photo,
+        #    u'video':Video,
+
+        #}
+        #db.collection(u'sharing').document().set(data)
+        return render(request,'SellProduct.html',{'person':person})
+    else :
+        return render(request,'SellProduct.html')

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'sharing',
     'workshop',
     'group',
+    'marketplace',
     # 'rest_auth',
     'django.contrib.sites',
     # 'allauth',

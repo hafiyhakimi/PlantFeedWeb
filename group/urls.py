@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # from LOGIN.views import UserReg, sharing, discussion, view, workshop, booking, member
 from .import views
-from django.conf.urls import url
+from django.urls import re_path as url, include
 # from .import index
 
 #from .api import UserList, UserDetail, UserAuthentication

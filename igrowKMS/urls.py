@@ -17,7 +17,7 @@ from django.contrib import admin, auth
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 #from .import views
-from django.conf.urls import url, include
+from django.urls import re_path as url, include
 from rest_framework import authentication
 from django.conf.urls.static import static
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('group.urls')),
     path('', include('sharing.urls')),
     path('', include('workshop.urls')),
+    path('', include('marketplace.urls')),
     #path('auth/', include('auth.urls')),
     #path('api/', include('member.urls')),
 ]

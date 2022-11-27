@@ -697,23 +697,31 @@ def mainMarketplace(request):
 def sellProduct(request, fk1):
     person = Person.objects.get(pk=fk1)
     if request.method=='POST':
-        Title=request.POST.get('Title')
-        Message=request.POST.get('Message')
-        Photo=request.POST.get('Photo')
-        Video=request.POST.get('Video')
-        f = Person.objects.get(pk=fk1)
-        #Graph=request.POST.get('Graph')
-        MarketplaceFeed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
+        product = MarketplaceFeed()
+        product.Title=request.POST.get('Title')
+        product.Message=request.POST.get('Message')
+        
+        if len(request.FILES) != 0:
+            product.Photo=request.FILES['Photo']
+        
+        if len(request.FILES) != 0:
+            product.Video=request.FILES['Video']
+        
+        product.Person_fk=person
+        
+        product.save()
+        # MarketplaceFeed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
         messages.success(request,'The new feed is save succesfully..!')
+        
+        # Title=request.POST.get('Title')
+        # Message=request.POST.get('Message')
+        # Photo=request.POST.get('Photo')
+        # Video=request.POST.get('Video')
+        # f = Person.objects.get(pk=fk1)
+        # #Graph=request.POST.get('Graph')
+        # MarketplaceFeed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
+        # messages.success(request,'The new feed is save succesfully..!')
 
-        #data={
-        #    u'title': Title,
-        #    u'message':Message,
-        #    u'photo':Photo,
-        #    u'video':Video,
-
-        #}
-        #db.collection(u'sharing').document().set(data)
         return render(request,'SellProduct.html',{'person':person})
     else :
         return render(request,'SellProduct.html')

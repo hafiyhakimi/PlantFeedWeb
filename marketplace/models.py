@@ -13,7 +13,7 @@ class MarketplaceFeed(models.Model):
         db_table = 'MarketplaceFeed'
     Title = models.CharField(max_length=255, blank=True)
     Message = models.CharField(max_length=1500,blank=True)
-    Photo = models.ImageField(upload_to ='images/')
+    Photo = models.ImageField(upload_to ='images/', null=True)
     Video = models.FileField(upload_to='media/', null=True)
     Graph = models.FileField(upload_to='videomedia/')
     Person_fk = models.ForeignKey(Person, on_delete=models.CASCADE)

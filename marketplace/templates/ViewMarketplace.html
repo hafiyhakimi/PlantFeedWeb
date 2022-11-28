@@ -1,4 +1,4 @@
-{% extends 'sharing.html' %}
+{% extends 'sellProduct.html' %}
 
 <!doctype html>
 <html lang="en">
@@ -58,22 +58,22 @@
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="sharing" role="tabpanel" aria-labelledby="sharing-tab">
                         <div class="container my-3 bg-light">
-                          <label for="exampleFormControlTextarea1" style="font-size: 2em;" >View Sharing</label>
+                          <label for="exampleFormControlTextarea1" style="font-size: 2em;" >View Marketplace</label>
                           <form method="POST" class="container row g-3" >
                             {% csrf_token %}
-                            {% for feed in feed%}
+                            {% for MarketplaceFeed in MarketplaceFeed%}
                             <div class="col-12">
                               <label for="inputTitle" class="container text-left">Title</label>
-                              <input type="text" class="form-control" id="title" placeholder="Enter title" name="Title" value="{{ feed.Title }}">
+                              <input type="text" class="form-control" id="title" placeholder="Enter title" name="Title" value="{{ MarketplaceFeed.Title }}">
                             </div>
                             <div class="col-md-6">
                               <label for="inputNewSharing" class="form-label">Message</label>
-                              <textarea class="form-control" id="inputSharing" name="Message" rows="10" cols="10" placeholder="Enter feed" value="{{ feed.Message }}"></textarea>
+                              <textarea class="form-control" id="inputSharing" name="Message" rows="10" cols="10" placeholder="Enter feed" value="{{ MarketplaceFeed.Message }}"></textarea>
                             </div>
                             <br/><br/>
                             <div class="col-12">
                               <label for="inputImage" class="form-label">Photo</label>
-                              <input type="file" img src="media/{{feed.Photo}}" class="form-control" id="inputImage" name="Photo" placeholder="Enter image">
+                              <input type="file" img src="media/{{MarketplaceFeed.Photo}}" class="form-control" id="inputImage" name="Photo" placeholder="Enter image">
                             </div>
                             <br/><br/>
                             <div class="col-12">

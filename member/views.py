@@ -26,6 +26,7 @@ from .models import Person
 from member.models import Member
 from sharing.models import Feed
 from marketplace.models import MarketplaceFeed
+from payment.models import Payment
 from rest_framework.permissions import AllowAny
 from member.serializers import MyTokenObtainPairSerializer, UsersSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -755,9 +756,7 @@ def payment(request):
         except Payment.DoesNotExist:
             raise Http404('Data does not exist')
 
-            
-
-    stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
-    intent = stripe.PaymentIntent.create(
-        amount=total,
-    )
+        stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
+        intent = stripe.PaymentIntent.create(
+            amount=total,
+        )

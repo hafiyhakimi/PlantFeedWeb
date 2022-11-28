@@ -29,6 +29,7 @@ from marketplace.models import MarketplaceFeed
 from rest_framework.permissions import AllowAny
 from member.serializers import MyTokenObtainPairSerializer, UsersSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.contrib.auth.decorators import login_required
 # import requests
 #from member.models import Users 
 from .serializers import UsersSerializer
@@ -745,3 +746,18 @@ def sellProduct(request, fk1):
         # sharing = GroupSharing.objects.all()
         person = Person.objects.filter(Email=request.session['Email'])
         return render(request,'ViewMarketplace.html',{'MarketplaceFeed':MarketplaceFeed, 'person':person})  
+
+@login_required
+def payment(request):
+        try:
+            data=Payment.objects.all()
+            return render(request,'Payment.html',{'data':data})
+        except Payment.DoesNotExist:
+            raise Http404('Data does not exist')
+
+            
+
+    stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
+    intent = stripe.PaymentIntent.create(
+        amount=total,
+    )

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'workshop',
     'group',
     'marketplace',
+    'payment',
     # 'rest_auth',
     'django.contrib.sites',
     # 'allauth',

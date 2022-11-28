@@ -282,14 +282,28 @@ def mainSharing(request):
 def sharing(request, fk1):
     person = Person.objects.get(pk=fk1)
     if request.method=='POST':
-        Title=request.POST.get('Title')
-        Message=request.POST.get('Message')
-        Photo=request.POST.get('Photo')
-        Video=request.POST.get('Video')
-        f = Person.objects.get(pk=fk1)
-        #Graph=request.POST.get('Graph')
-        Feed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
+        sharing = Feed()
+        sharing.Title = request.POST.get('Title')
+        sharing.Message = request.POST.get('Message')
+        
+        if len(request.FILES) != 0:
+            sharing.Photo=request.FILES['Photo']
+            
+        if len(request.FILES) != 0:
+            sharing.Video=request.FILES['Video']
+            
+        sharing.Person_fk = person
+            
+        sharing.save()
         messages.success(request,'The new feed is save succesfully..!')
+        # Title=request.POST.get('Title')
+        # Message=request.POST.get('Message')
+        # Photo=request.POST.get('Photo')
+        # Video=request.POST.get('Video')
+        # f = Person.objects.get(pk=fk1)
+        #Graph=request.POST.get('Graph')
+        # Feed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
+        # messages.success(request,'The new feed is save succesfully..!')
 
         #data={
         #    u'title': Title,
@@ -725,3 +739,9 @@ def sellProduct(request, fk1):
         return render(request,'SellProduct.html',{'person':person})
     else :
         return render(request,'SellProduct.html')
+    
+    def viewMarketplaceFeed(request):
+        MarketplaceFeed = MarketplaceFeed.objects.all()
+        # sharing = GroupSharing.objects.all()
+        person = Person.objects.filter(Email=request.session['Email'])
+        return render(request,'ViewMarketplace.html',{'MarketplaceFeed':MarketplaceFeed, 'person':person})  

@@ -75,6 +75,7 @@
     </ul>
   </div>
 <br/>
+
 {% block content %}
 <div class="container">
   <div class="row">
@@ -86,42 +87,36 @@
               {% csrf_token %}
               
               {% for person in person %}
-                        <div class="container my-3 bg-light">
-                          <label for="exampleFormControlTextarea1" style="font-size: 2em;" >Marketplace</label>
-                          <div class="m">
-                            <a href="{% url 'SellProduct' person.id %}" class="link-primary"><img src="media/add.png" width="30" height="30">Sell Product</a> 
-                          </div>
-                          
-                            </div>
-                          
-                        
-
-                        
-                        {% endfor %}
+                <div class="container my-3 bg-light">
+                  <label for="exampleFormControlTextarea1" style="font-size: 2em;" >Marketplace</label>
+                    <div class="m">
+                      <a href="{% url 'SellProduct' person.id %}" class="link-primary"><img src="media/add.png" width="30" height="30">Sell Product</a> 
+                    </div>
+                </div>                            
+              {% endfor %}     
 {% endblock content %}
+
 {% block body %}
-
-
       {% csrf_token %}
       {% for person in person %}
-      {% for feed in feed %}
+      {% for MarketplaceFeed in MarketplaceFeed %}
       <div class="container my-3 bg-light">
         <div class=profileIcon>
-          <img src="media/{{ feed.Person_fk.Photo }}" width="40" height="40">
-          <b>{{feed.Person_fk.Username}}</b>
+          <img src="media/{{ MarketplaceFeed.Person_fk.Photo }}" width="40" height="40">
+          <b>{{MarketplaceFeed.Person_fk.Username}}</b>
           
-          {% if person.Username == feed.Person_fk.Username%}
+          {% comment %} {% if person.Username == MarketplaceFeed.Person_fk.Username%}
           <div class="btn-group">
             <a value="Edit" href="{% url 'UpdateSharing' feed.id %}">
               <img src="media/edit.png" width="30" height="30"></a>
               <a value="Delete" href="{% url 'DeleteSharing' feed.id %}">
                 <img src="media/delete.jpg" width="30" height="30"></a>
                 {% endif %}
-          </div>
+          </div> {% endcomment %}
           <br>
-          {{ feed.Message }}
+          {{ MarketplaceFeed.Message }}
         </div>
-        <img src="media/{{feed.Photo}}" width="1000" height="300">
+        <img src="images/{{MarketplaceFeed.Photo}}" width="1000" height="300">
         <br>
         <table class="table">
           <tbody>
@@ -137,7 +132,7 @@
   {% endfor %}
   {% endfor %}
 
-  {% for person in person %}
+  {% comment %} {% for person in person %}
     {% for sharing in sharing %}
     <div class="container my-3 bg-light">
       <div class=profileIcon>
@@ -169,7 +164,7 @@
 </table>
 </div>
   {% endfor %}
-  {% endfor %}
+  {% endfor %} {% endcomment %}
 
 </div>
     

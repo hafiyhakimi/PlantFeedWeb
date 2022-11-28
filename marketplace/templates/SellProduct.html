@@ -77,11 +77,11 @@
                             {% csrf_token %}
                             <div class="col-12">
                               <label for="inputTitle" class="form-label">Title</label>
-                              <input type="text" class="form-control" id="title" placeholder="Enter title" name="Title" value="{{ feed.Title }}">
+                              <input type="text" class="form-control" id="title" placeholder="Enter title" name="Title" value="{{ MarketplaceFeed.Title }}">
                             </div>
                             <div class="col-md-6">
                               <label for="inputNewSharing" class="form-label">Message</label>
-                              <textarea class="form-control" id="inputSharing" name="Message" rows="10" cols="10" placeholder="Enter feed" value="{{ feed.Message }}"></textarea>
+                              <textarea class="form-control" id="inputSharing" name="Message" rows="10" cols="10" placeholder="Enter feed" value="{{ MarketplaceFeed.Message }}"></textarea>
                             </div>
                             <br/><br/>
                             <div class="col-12">

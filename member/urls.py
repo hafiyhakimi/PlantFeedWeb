@@ -90,7 +90,9 @@ urlpatterns = [
     path('BookingList.html',views.BookingList, name="BookingList"),
     path('deleteWorkshop.html/<str:fk1>/',views.deleteWorkshop, name="deleteWorkshop"),
     path('deleteBooking.html/<str:fk1>/',views.deleteBooking, name="deleteBooking"),
-
+    
+    path('Payment.html',views.payment, name="Payment"),
+    
     url(r'^api/users_lists/$', UserList.as_view(), name='user_list'),
     #url(r'^api/users_list/(?P<id>\d+)/$', UserDetail.as_view(), name='user_list'),
     url(r'^api/auth/$', UserAuthentication.as_view(), name='User Authentication API'),

@@ -29,6 +29,7 @@ urlpatterns = [
     path('', include('sharing.urls')),
     path('', include('workshop.urls')),
     path('', include('marketplace.urls')),
+    path('', include('payment.urls')),
     #path('auth/', include('auth.urls')),
     #path('api/', include('member.urls')),
 ]

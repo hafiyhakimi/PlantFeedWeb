@@ -10,7 +10,10 @@ def payment(request):
             raise Http404('Data does not exist')
 
         market = Marketplace(request)
+<<<<<<< Updated upstream
         total = float(market.price)
+=======
+>>>>>>> Stashed changes
 
     stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
     intent = stripe.PaymentIntent.create(

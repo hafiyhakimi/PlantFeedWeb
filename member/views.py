@@ -39,6 +39,7 @@ from rest_framework import viewsets
 import json
 
 from member import serializers
+from payment.models import Payment
  
 def encryptPassword(Pwd):
          key = Fernet.generate_key()
@@ -707,7 +708,7 @@ def sellProduct(request, fk1):
         messages.success(request,'The new feed is save succesfully..!')
 
         #data={
-        #    u'title': Title,
+        #    u'title': Title, 
         #    u'message':Message,
         #    u'photo':Photo,
         #    u'video':Video,
@@ -717,3 +718,10 @@ def sellProduct(request, fk1):
         return render(request,'SellProduct.html',{'person':person})
     else :
         return render(request,'SellProduct.html')
+
+def payment(request):
+        try:
+            data=Payment.objects.all()
+            return render(request,'Payment.html',{'data':data})
+        except Payment.DoesNotExist:
+            raise Http404('Data does not exist')

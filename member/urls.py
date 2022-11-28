@@ -52,6 +52,7 @@ urlpatterns = [
     path('Loginpage', views.loginpage, name="Loginpage"),
     path('Logout',views.logout, name="Logout"),
     path('View',views.view,name="View"),
+    path('Payment.html',views.payment, name="Payment"),
 
     path('MainSharing.html',views.mainSharing, name="MainSharing"),
     path('sharing.html/<str:fk1>/',views.sharing, name="Sharing"),

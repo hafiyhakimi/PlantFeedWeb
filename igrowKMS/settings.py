@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'group',
     'marketplace',
     'payment',
+    'basket',
     # 'rest_auth',
     'django.contrib.sites',
     # 'allauth',
@@ -155,7 +156,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+BASKET_SESSION_ID = "basket"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -169,6 +170,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+LOGIN_REDIRECT_URL = 'login.html',
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

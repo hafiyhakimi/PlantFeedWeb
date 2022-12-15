@@ -5,8 +5,7 @@ from member.models import Person
 class Payment(models.Model):
     class Meta:
         db_table = 'payment'
-    firstName = models.CharField(max_length=255, blank=True)
-    lastName = models.CharField(max_length=255, blank=True)
+    fullname = models.CharField(max_length=255, blank=True)
     email = models.EmailField(max_length=255, blank=True)
     address = models.CharField(max_length=255, blank=True)
     address2 = models.CharField(max_length=255, blank=True)

@@ -92,6 +92,11 @@ urlpatterns = [
     path('deleteBooking.html/<str:fk1>/',views.deleteBooking, name="deleteBooking"),
     
     path('Payment.html',views.payment, name="Payment"),
+
+    path('summary.html', views.basket_summary, name='basket_summary'),
+    path('add/', views.basket_add, name='basket_add'),
+    path('delete/', views.basket_delete, name='basket_delete'),
+    path('update/', views.basket_update, name='basket_update'),
     
     url(r'^api/users_lists/$', UserList.as_view(), name='user_list'),
     #url(r'^api/users_list/(?P<id>\d+)/$', UserDetail.as_view(), name='user_list'),

@@ -4,43 +4,28 @@ from django.db.models.signals import post_save
 from django.contrib.syndication.views import Feed
 from django.shortcuts import render
 from group.models import Group
+from datetime import datetime
 
 from django.conf import settings
 from django.urls import reverse
 from member.models import Person
 
 # Create your models here.
-class MarketplaceFeed(models.Model):
+class prodProduct(models.Model):
     class Meta:
-        db_table = 'MarketplaceFeed'
-    Title = models.CharField(max_length=255, blank=True)
-    Message = models.CharField(max_length=1500,blank=True)
-    Photo = models.ImageField(upload_to ='images/', null=True)
-    Video = models.FileField(upload_to='media/', null=True)
-    Graph = models.FileField(upload_to='videomedia/')
+        db_table = 'prodProduct'
+    productName = models.CharField(max_length=255, blank=True)
+    productDesc = models.CharField(max_length=1500,blank=True)
+    productPrice = models.CharField(max_length=255, blank=True)
+    productPhoto = models.ImageField(upload_to ='images/', null=True)
+    productRating = models.IntegerField(default=0)
+    timePosted = models.DateTimeField(default=datetime.now, blank=True)
     Person_fk = models.ForeignKey(Person, on_delete=models.CASCADE)
 
-    def showvideo(request):
-
-        lastvideo = video.objects.last()
-        videofile = lastvideo.videofile
-    
-        form = SellForm(request.POST or None, request.FILES or None)
-        if form.is_valid():
-            form.save()
-
-        context= {'videofile': videofile, 'form': form}
-
-        return render(request, 'sharing.html', context)
-    #def __str__(self):
-       # return self.Message + ": " + str(self.videofile)
-
-class MarketplaceComment(models.Model):
+class productComment(models.Model):
     class Meta:
-        db_table = 'MarketplaceComment'    
-    Message = models.CharField(max_length=255)
-    Pictures = models.ImageField(upload_to='uploads/')
-    Video = models.FileField(upload_to='uploads/')
+        db_table = 'productComment'    
+    Message = models.CharField(max_length=255, blank=True)
     
 # class Products(models.Model):
 #     class Meta:
@@ -71,7 +56,6 @@ class ProductManager(models.Manager):
     def get_queryset(self):
         return super(ProductManager, self).get_queryset().filter(is_active=True)
 
-
 class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(max_length=255, unique=True)
@@ -84,7 +68,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='product', on_delete=models.CASCADE)

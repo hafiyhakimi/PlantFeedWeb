@@ -3,7 +3,7 @@
 <head>
     <style>
         .content {
-          max-width: 500px;
+          max-width: 750px;
           margin: auto;
           overflow-x: hidden;
           width: 200px;
@@ -20,6 +20,7 @@
           height: auto;
           border: 1px solid #ddd;
           border-radius: 4px;
+          align-items: center;
           padding: 5px;
 
           }
@@ -98,81 +99,83 @@
 
 {% block body %}
       {% csrf_token %}
-      {% for person in person %}
-      {% for MarketplaceFeed in MarketplaceFeed %}
-      <div class="container my-3 bg-light">
-        <div class=profileIcon>
-          <img src="media/{{ MarketplaceFeed.Person_fk.Photo }}" width="40" height="40">
-          <b>{{MarketplaceFeed.Person_fk.Username}}</b>
-          
-          {% comment %} {% if person.Username == MarketplaceFeed.Person_fk.Username%}
-          <div class="btn-group">
-            <a value="Edit" href="{% url 'UpdateSharing' feed.id %}">
-              <img src="media/edit.png" width="30" height="30"></a>
-              <a value="Delete" href="{% url 'DeleteSharing' feed.id %}">
-                <img src="media/delete.jpg" width="30" height="30"></a>
-                {% endif %}
-          </div> {% endcomment %}
-          <br>
-          {{ MarketplaceFeed.Message }}
-        </div>
-        <img src="images/{{MarketplaceFeed.Photo}}" width="1000" height="300">
-        <br>
-        <table class="table">
-          <tbody>
-        <tr class="table">
-        <th><img src="media/likes.png" width="50" height="50"> Likes</th>
-        <th><img src="media/comments.png" width="50" height="50"> Comment</th>
-        <th><img src="media/share.png" width="50" height="50"> Share</th>
-     
-      </tr>
-    </tbody>
-  </table>
+      <div class="container">
+        <section style="background-color: #F0F2F5;">
+            <div class="container py-5">
+              <div class="main-timeline-2">
+                {% csrf_token %}
 
-  {% endfor %}
-  {% endfor %}
+                {% for item in marketplace reversed %}
+                <div class="timeline-2 left-2">
+                  <div class="card" style="width: 650px;">
+                    <!-- <div class=profileIcon>
+                        <img src="media/{{ allfeed.Creator.Photo }}" alt class="d-block ui-w-100 rounded-circle" style="width: 45px; height: 45px; margin: 10px;">
+                        <b>{{ allfeed.Creator.Username }}</b>
+                    </div> -->
+                    <table style="border: 0; margin-right:550px">
+                        <th>
+                            <div class="user-image">
+                                <img class="rounded-circle" src="media/{{ item.Person_fk.Photo }}" alt="..." style="width: 45px; height: 45px; margin: 10px;">
+                            </div>
+                        </th>
+                        <th>
+                            <div class="username">
+                                <span class="username">{{ item.Person_fk.Username }}</span>
+                            </div>               
+                        </th>
+                    </table>
+                    
+                    <div class="card-body p-4">
+                      <b>{{item.productName}}</b><br>
+                    </div>
+                    
+                    <img src="{{item.productPhoto}}" class="card-img-top"
+                      alt="Responsive image" style="width: 550px;margin-left: 45px;">
+                      <table style="border: none;  ">
+                        <th style="padding-bottom: 0; align-items: center;">
+                          <p class="text-muted mb-4" style="font-size: x-small; padding: 0;" value="{{ item.timePosted }}"><i class="far fa-clock" aria-hidden="true"></i>{{ item.timePosted }}</p>
+                      </th>
+                        {% comment %} <th>
+                            <a href="#" style="margin-left: 400px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" margin-left="50px" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                  </svg>{{likes.count}}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="#" style="margin-left: 20px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-dots" viewBox="0 0 16 16">
+                                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                    <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                  </svg>{{comment.count}}
+                            </a>
+                        </th>
+                        <th>
+                            <a href="#" style="margin-left: 20px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                                    <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                                  </svg>{{comment.count}}
+                            </a>
+                        </th> {% endcomment %}
+                      </table>
+                    
+                    <div class="card-body p-4">
+                      <b>RM{{item.productPrice}}</b>
+                      <p class="mb-0" value="{{ item.productDesc }}">{{ item.productDesc }}</p>
+                      <br>
+                      <button type="submit" form="cart-form" style="float: right; margin-right: 5px">Add to cart</button>
+                      <button type="submit" form="buy-form" style="float: right; margin-right: 10px">Buy now</button>
+                    </div>
+                  </div>
 
-  {% comment %} {% for person in person %}
-    {% for sharing in sharing %}
-    <div class="container my-3 bg-light">
-      <div class=profileIcon>
-        <img src="../../media/{{ sharing.Person_fk.Photo }}" width="40" height="40">
-        <b>{{sharing.Person_fk.Username}}</b>>><b>{{sharing.Group_fk.GName}}</b>
-        
-        {% if person.Username == sharing.Person_fk.Username%}
-        <div class="btn-group">
-          <a value="Edit" href="{% url 'UpdateGroupSharing' sharing.id %}">
-            <img src="../../media/edit.png" width="30" height="30"></a>
-            <a value="Delete" href="{% url 'DeleteGroupSharing' sharing.id %}">
-              <img src="../../media/delete.jpg" width="30" height="30"></a>
-              {% endif %}
-        </div>
-        <br>
-        {{ sharing.GMessage }}
-      </div>
-      <img src="../../media/{{sharing.GPhoto}}" width="1000" height="300">
-      <br>
-      <table class="table">
-        <tbody>
-      <tr class="table">
-      <th><img src="../../media/likes.png" width="50" height="50"> Likes</th>
-      <th><img src="../../media/comments.png" width="50" height="50"> Comment</th>
-      <th><img src="../../media/share.png" width="50" height="50"> Share</th>
-      
-    </tr>
-  </tbody>
-</table>
-</div>
-  {% endfor %}
-  {% endfor %} {% endcomment %}
+                </div>
+                {% endfor %}
+                
+    </div>
+    <br/>
 
-</div>
-    
   </div>
-  </div>
-  </div>
-  </div>
-</div>
 </body>
   </div>
 </div>

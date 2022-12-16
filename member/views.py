@@ -25,7 +25,7 @@ from group.models import Group, GroupMember, GroupSharing
 from .models import Person
 from member.models import Member
 from sharing.models import Feed
-from marketplace.models import MarketplaceFeed
+from marketplace.models import prodProduct
 from payment.models import Payment
 from rest_framework.permissions import AllowAny
 from member.serializers import MyTokenObtainPairSerializer, UsersSerializer
@@ -687,11 +687,11 @@ def deleteBooking(request,fk1):
     
 def mainMarketplace(request):
     try:
-        marketplace=MarketplaceFeed.objects.all()
+        marketplace=prodProduct.objects.all()
         person = Person.objects.filter(Email=request.session['Email'])
         user=Person.objects.all()
-        return render(request,'MainMarketplace.html',{'marketplace':marketplace, 'person':person, 'user':user, 'sharing':sharing})
-    except MarketplaceFeed.DoesNotExist:
+        return render(request,'MainMarketplace.html',{'marketplace':marketplace, 'person':person, 'user':user})
+    except prodProduct.DoesNotExist:
         raise Http404('Data does not exist')
 
 # def sellProduct(request):
@@ -720,15 +720,13 @@ def mainMarketplace(request):
 def sellProduct(request, fk1):
     person = Person.objects.get(pk=fk1)
     if request.method=='POST':
-        product = MarketplaceFeed()
-        product.Title=request.POST.get('Title')
-        product.Message=request.POST.get('Message')
+        product = prodProduct()
+        product.productName=request.POST.get('productName')
+        product.productDesc=request.POST.get('productDesc')
+        product.productPrice=request.POST.get('productPrice')
         
         if len(request.FILES) != 0:
-            product.Photo=request.FILES['Photo']
-        
-        if len(request.FILES) != 0:
-            product.Video=request.FILES['Video']
+            product.productPhoto=request.FILES['productPhoto']
         
         product.Person_fk=person
         

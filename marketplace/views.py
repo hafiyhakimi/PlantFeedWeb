@@ -14,7 +14,7 @@ from django.dispatch import receiver
 from cryptography.fernet import Fernet
 from member.models import Person
 from sharing.models import Feed
-from marketplace.models import MarketplaceFeed
+from marketplace.models import prodProduct
 # from .models import Person
 
 # Create your views here.
@@ -23,31 +23,39 @@ from marketplace.models import MarketplaceFeed
 #marketplace
 def mainMarketplace(request):
     try:
-        marketplace=MarketplaceFeed.objects.all()
-        return render(request,'MainMarketplace.html',{'marketplace':marketplace})
-    except MarketplaceFeed.DoesNotExist:
+        marketplace=prodProduct.objects.all()
+        person = Person.objects.filter(Email=request.session['Email'])
+        user=Person.objects.all()
+        return render(request,'MainMarketplace.html',{'marketplace':marketplace, 'person':person, 'user':user})
+    except prodProduct.DoesNotExist:
         raise Http404('Data does not exist')
-
-def sellProduct(request):
+    
+def sellProduct(request, fk1):
+    person = Person.objects.get(pk=fk1)
     if request.method=='POST':
-        Title=request.POST.get('Title')
-        Message=request.POST.get('Message')
-        Photo=request.POST.get('Photo')
-        Video=request.POST.get('Video')
-        #person = Person.objects.filter(Email=request.session['id'])
-        #Graph=request.POST.get('Graph')
-        Feed(Title=Title,Message=Message,Photo=Photo,Video=Video).save(),
+        product = prodProduct()
+        product.productName=request.POST.get('productName')
+        product.productDesc=request.POST.get('productDesc')
+        
+        if len(request.FILES) != 0:
+            product.Photo=request.FILES['Photo']
+        
+        product.Person_fk=person
+        
+        product.save()
+        # MarketplaceFeed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
         messages.success(request,'The new feed is save succesfully..!')
+        
+        # Title=request.POST.get('Title')
+        # Message=request.POST.get('Message')
+        # Photo=request.POST.get('Photo')
+        # Video=request.POST.get('Video')
+        # f = Person.objects.get(pk=fk1)
+        # #Graph=request.POST.get('Graph')
+        # MarketplaceFeed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
+        # messages.success(request,'The new feed is save succesfully..!')
 
-        #data={
-        #    u'title': Title,
-        #    u'message':Message,
-        #    u'photo':Photo,
-        #    u'video':Video,
-
-        #}
-        #db.collection(u'sharing').document().set(data)
-        return render(request,'SellProduct.html')
+        return render(request,'SellProduct.html',{'person':person})
     else :
         return render(request,'SellProduct.html')
 

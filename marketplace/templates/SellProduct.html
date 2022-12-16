@@ -76,22 +76,21 @@
                           <form method="POST" class="container row g-3" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="col-12">
-                              <label for="inputTitle" class="form-label">Title</label>
-                              <input type="text" class="form-control" id="title" placeholder="Enter title" name="Title" value="{{ MarketplaceFeed.Title }}">
+                              <label for="inputTitle" class="form-label">Product Name</label>
+                              <input type="text" class="form-control" id="title" placeholder="Enter Product Name" name="productName" value="{{ prodProduct.productName }}">
                             </div>
                             <div class="col-md-6">
-                              <label for="inputNewSharing" class="form-label">Message</label>
-                              <textarea class="form-control" id="inputSharing" name="Message" rows="10" cols="10" placeholder="Enter feed" value="{{ MarketplaceFeed.Message }}"></textarea>
+                              <label for="inputNewSharing" class="form-label">Description</label>
+                              <textarea class="form-control" id="inputSharing" name="productDesc" rows="10" cols="10" placeholder="Enter Product Description" value="{{ prodProduct.productDesc }}"></textarea>
+                            </div>
+                            <div class="col-12">
+                              <label for="inputTitle" class="form-label">Product Price</label>
+                              <input type="text" class="form-control" id="title" placeholder="RM" name="productPrice" value="{{ prodProduct.productPrice }}">
                             </div>
                             <br/><br/>
                             <div class="col-12">
                               <label for="inputImage" class="form-label">Photo</label>
-                              <input type="file" class="form-control" id="inputImage" name="Photo" placeholder="Enter image">
-                            </div>
-                            <br/><br/>
-                            <div class="col-12">
-                              <label for="inputVideo" class="form-label">Video</label>
-                              <input type="file" class="form-control" id="inputVideo" name="Video" placeholder="Enter video">
+                              <input type="file" class="form-control" id="inputImage" name="productPhoto" placeholder="Enter image">
                             </div>
                             <br/><br/>
                             <br/><br/>

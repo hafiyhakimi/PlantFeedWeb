@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 
-from marketplace.models import Product
+from marketplace.models import prodProduct
 
 
 class Basket():

@@ -36,6 +36,19 @@
       </style>
 </head>
 
+{% if messages %}
+  {% for message in messages %}
+    <div id="message" class="alert alert-success">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<script>
+  setTimeout(function() {
+    document.getElementById("message").style.display = "none";
+  }, 5000);
+</script>
 <!-- Required meta tags -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

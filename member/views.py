@@ -743,7 +743,7 @@ def sellProduct(request, fk1):
         # MarketplaceFeed(Title=Title,Message=Message,Photo=Photo,Video=Video,Person_fk=f).save(),
         # messages.success(request,'The new feed is save succesfully..!')
 
-        return render(request,'SellProduct.html',{'person':person})
+        return redirect('MainMarketplace')
     else :
         return render(request,'SellProduct.html')
     

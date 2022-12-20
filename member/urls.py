@@ -91,7 +91,7 @@ urlpatterns = [
     path('deleteWorkshop.html/<str:fk1>/',views.deleteWorkshop, name="deleteWorkshop"),
     path('deleteBooking.html/<str:fk1>/',views.deleteBooking, name="deleteBooking"),
     
-    path('Payment.html',views.payment, name="Payment"),
+    path('payment.html',views.BasketView, name="Payment"),
 
     path('summary.html', views.basket_summary, name='basket_summary'),
     path('add/', views.basket_add, name='basket_add'),

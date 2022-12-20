@@ -30,7 +30,6 @@ from payment.models import Payment
 from rest_framework.permissions import AllowAny
 from member.serializers import MyTokenObtainPairSerializer, UsersSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth.decorators import login_required
 # import requests
 #from member.models import Users 
 from .serializers import UsersSerializer
@@ -45,9 +44,15 @@ from member import serializers
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 
-from marketplace.models import Product
-
+import os
+import stripe
+from marketplace.models import prodProduct
 from basket.models import Basket
+from django.views.generic.base import TemplateView
+from orders.views import payment_confirmation
+from django.views.decorators.csrf import csrf_exempt
+
+from orders.models import Order, OrderItem
  
 def encryptPassword(Pwd):
          key = Fernet.generate_key()
@@ -60,12 +65,6 @@ def deryptPassword(Pwd):
          fernet = Fernet(key)
          decrypted = fernet.decrypt(Pwd).decode()
          return decrypted
-
-
-
-
-
-
 
 def signIn(request):
     if request.method=='POST':
@@ -754,17 +753,58 @@ def sellProduct(request, fk1):
         return render(request,'ViewMarketplace.html',{'MarketplaceFeed':MarketplaceFeed, 'person':person})  
 
 
-def payment(request):
-        try:
-            data=Payment.objects.all()
-            return render(request,'Payment.html',{'data':data})
-        except Payment.DoesNotExist:
-            raise Http404('Data does not exist')
+#Payment View
+def order_placed(request):
+    basket = Basket(request)
+    basket.clear()
+    return render(request, 'payment/orderplaced.html')
 
-            stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
-            intent = stripe.PaymentIntent.create(
-                amount=total,
+
+class Error(TemplateView):
+    template_name = 'payment/error.html'
+
+
+@login_required
+def BasketView(request):
+
+    basket = Basket(request)
+    total = str(basket.get_total_price())
+    total = total.replace('.', '')
+    total = int(total)
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    intent = stripe.PaymentIntent.create(
+        amount=total,
+        currency='myr',
+        metadata={'userid': request.user.id}
+    )
+
+    return render(request, 'payment/payment.html', {'client_secret': intent.client_secret, 
+                                                            'STRIPE_PUBLISHABLE_KEY': os.environ.get('STRIPE_PUBLISHABLE_KEY')})
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    event = None
+
+    try:
+        event = stripe.Event.construct_from(
+            json.loads(payload), stripe.api_key
         )
+    except ValueError as e:
+        print(e)
+        return HttpResponse(status=400)
+
+    # Handle the event
+    if event.type == 'payment_intent.succeeded':
+        payment_confirmation(event.data.object.client_secret)
+
+    else:
+        print('Unhandled event type {}'.format(event.type))
+
+    return HttpResponse(status=200)
+
+    #Basket View
 
 def basket_summary(request):
     basket = Basket(request)
@@ -807,3 +847,53 @@ def basket_update(request):
         basketsubtotal = basket.get_subtotal_price()
         response = JsonResponse({'qty': basketqty, 'subtotal': basketsubtotal})
         return response
+
+# Marketplace New
+def product_all(request):
+    products = Product.products.all()
+    return render(request, 'marketplace/MainMarketplace.html', {'products': products})
+
+
+def category_list(request, category_slug=None):
+    category = get_object_or_404(Category, slug=category_slug)
+    products = Product.products.filter(category=category)
+    return render(request, 'marketplace/category.html', {'category': category, 'products': products})
+
+
+def product_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug, in_stock=True)
+    return render(request, 'marketplace/single.html', {'product': product})
+
+
+# Order View
+def add(request):
+    basket = Basket(request)
+    if request.POST.get('action') == 'post':
+
+        order_key = request.POST.get('order_key')
+        user_id = request.user.id
+        baskettotal = basket.get_total_price()
+
+        # Check if order exists
+        if Order.objects.filter(order_key=order_key).exists():
+            pass
+        else:
+            order = Order.objects.create(user_id=user_id, full_name='name', address1='add1',
+                                address2='add2', total_paid=baskettotal, order_key=order_key)
+            order_id = order.pk
+
+            for item in basket:
+                OrderItem.objects.create(order_id=order_id, product=item['product'], price=item['price'], quantity=item['qty'])
+
+        response = JsonResponse({'success': 'Return something'})
+        return response
+
+
+def payment_confirmation(data):
+    Order.objects.filter(order_key=data).update(billing_status=True)
+
+
+def user_orders(request):
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
+    return orders

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'basket',
     # 'rest_auth',
     'django.contrib.sites',
+    'orders',
     # 'allauth',
     # 'allauth.account',
     # 'rest_auth.registration',

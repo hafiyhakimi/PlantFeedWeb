@@ -84,6 +84,16 @@
                               <textarea class="form-control" id="inputSharing" name="productDesc" rows="10" cols="10" placeholder="Enter Product Description" value="{{ prodProduct.productDesc }}"></textarea>
                             </div>
                             <div class="col-12">
+                              <label for="productCategory">Category</label><br>
+                              <select id="productCategory" name="category">
+                                <option value="Seed">Seed</option>
+                                <option value="Pest Control">Pest Control</option>
+                                <option value="Sapling">Sapling</option>
+                                <option value="Fertiliser">Fertiliser</option>
+                                <option value="Tool">Tool</option>
+                              </select>
+                            </div>
+                            <div class="col-12">
                               <label for="inputTitle" class="form-label">Product Price</label>
                               <input type="text" class="form-control" id="title" placeholder="RM" name="productPrice" value="{{ prodProduct.productPrice }}">
                             </div>

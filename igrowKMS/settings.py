@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'marketplace',
     'payment',
     'basket',
+    'orders',
     # 'rest_auth',
     'django.contrib.sites',
     # 'allauth',

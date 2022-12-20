@@ -45,9 +45,15 @@ from member import serializers
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 
-from marketplace.models import Product
-
+import os
+import stripe
+from marketplace.models import prodProduct
 from basket.models import Basket
+from django.views.generic.base import TemplateView
+from orders.views import payment_confirmation
+from django.views.decorators.csrf import csrf_exempt
+
+from orders.models import Order, OrderItem
  
 def encryptPassword(Pwd):
          key = Fernet.generate_key()

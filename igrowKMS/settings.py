@@ -103,7 +103,7 @@ AUTH_USER_MODEL='member.Person'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'igrow2',
+        'NAME': 'igrow',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',

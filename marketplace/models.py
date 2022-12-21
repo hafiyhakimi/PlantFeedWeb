@@ -18,6 +18,7 @@ from member.models import Person
 class prodProduct(models.Model):
     class Meta:
         db_table = 'prodProduct'
+    productid = models.AutoField(primary_key=True)
     productName = models.CharField(max_length=255, blank=True)
     productDesc = models.CharField(max_length=1500,blank=True)
     productCategory = models.CharField(max_length=255, blank=True)
@@ -26,6 +27,13 @@ class prodProduct(models.Model):
     productRating = models.IntegerField(default=0)
     timePosted = models.DateTimeField(default=datetime.now, blank=True)
     Person_fk = models.ForeignKey(Person, on_delete=models.CASCADE)
+    
+    def save(self):
+        super().save()
+        return self.productid
+    
+    def deleteProduct(self):
+        super().delete()
 
 # class productComment(models.Model):
 #     class Meta:

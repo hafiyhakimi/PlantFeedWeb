@@ -75,6 +75,12 @@ urlpatterns = [
     
     path('MainMarketplace.html',views.mainMarketplace, name="MainMarketplace"),
     path('SellProduct.html/<str:fk1>/',views.sellProduct, name="SellProduct"),
+    path('DeleteProduct/<str:fk1>/',views.deleteProduct, name="DeleteProduct"),
+    path('UpdateProduct.html/<str:fk1>/',views.updateProduct, name="UpdateProduct"),
+    
+    path('basket_add/<str:fk1>/<str:fk2>/',views.basket_add, name='basket_add'),
+    path('add_to_basket/<str:fk1>/<str:fk2>/',views.add_to_basket, name='add_to_basket'),
+    path('summary/', views.basket_summary, name='basket_summary'),
     
     path('MainMember.html', views.mainMember, name="MainMember"),
     path('member.html',views.member, name="member"),

@@ -730,6 +730,7 @@ def sellProduct(request, fk1):
         product.productName=request.POST.get('productName')
         product.productDesc=request.POST.get('productDesc')
         product.productPrice=request.POST.get('productPrice')
+        product.productCategory=request.POST.get('productCategory')
         
         if len(request.FILES) != 0:
             product.productPhoto=request.FILES['productPhoto']
@@ -752,6 +753,37 @@ def sellProduct(request, fk1):
         return redirect('MainMarketplace')
     else :
         return render(request,'SellProduct.html')
+    
+def deleteProduct(request,fk1):
+    product = prodProduct.objects.get(pk=fk1)
+    
+    try:
+        product = prodProduct.objects.get(pk=fk1)
+        product.deleteProduct()
+        return redirect('MainMarketplace')
+        
+    except prodProduct.DoesNotExist:
+        messages.success(request, 'The product does not exist')
+        return redirect('MainMarketplace')
+    
+def updateProduct(request,fk1):
+    product = prodProduct.objects.get(pk=fk1) 
+    if request.method == 'POST':
+        product.productName=request.POST.get('productName')
+        product.productDesc=request.POST.get('productDesc')
+        product.productCategory=request.POST.get('productCategory')
+        product.productPrice=request.POST.get('productPrice')
+        
+        if len(request.FILES) != 0:
+            product.productPhoto=request.FILES['productPhoto']
+            
+        fss = FileSystemStorage()
+        
+        product.save()
+        
+        return redirect('MainMarketplace')
+    else:
+        return render(request, 'UpdateProduct.html', {'product':product})
     
     def viewMarketplaceFeed(request):
         MarketplaceFeed = MarketplaceFeed.objects.all()
@@ -776,19 +808,42 @@ def basket_summary(request):
     basket = Basket(request)
     return render(request, 'summary.html', {'basket': basket})
 
+def basket_add(request, fk1,fk2):
+    # basket = Basket(request)
+    product = prodProduct.objects.get(pk=fk1)
+    user = Person.objects.get(pk=fk2)
+    if request.method=='POST':
+        productqty= request.POST.get('productqty')
+        basket = Basket(productqty=productqty,productid=product,Person_fk=user).save()
+        # basket.save()
+        return redirect('basket_summary')
+    return render(request, 'summary.html', {'basket': basket})
 
-def basket_add(request):
-    basket = Basket(request)
-    if request.POST.get('action') == 'post':
-        product_id = int(request.POST.get('productid'))
-        product_qty = int(request.POST.get('productqty'))
-        product = get_object_or_404(Product, id=product_id)
-        basket.add(product=product, qty=product_qty)
+def add_to_basket(request, fk1,fk2):
+    # basket = Basket(request)
+    product = prodProduct.objects.get(pk=fk1)
+    user = Person.objects.get(pk=fk2)
+    if request.method=='POST':
+        productqty= request.POST.get('productqty')
+        basket = Basket(productqty=productqty,productid=product,Person_fk=user).save()
+        # basket.save()
+        messages.success(request,'Item successfully added to your basket')
+        return redirect('../../../MainMarketplace.html')
+    return render(request, '../../../MainMarketplace.html', {'basket': basket})
 
-        basketqty = basket.__len__()
-        response = JsonResponse({'qty': basketqty})
-        return response
+# def basket_add(request):
+#     basket = Basket(request)
+#     if request.method=='POST':
+#         product.productid = request.POST.get('productid')
+#         product.productqty= request.POST.get('productqty')
+#         product = get_object_or_404(prodProduct, productid=product.productid)
+#         basket.add(product=product, qty=product.productqty)
 
+#         return redirect('basket_summary')
+#         # basketqty = basket.__len__()
+#         # response = JsonResponse({'qty': basketqty})
+#         # return response
+#     return render(request, 'summary.html', {'basket': basket})
 
 def basket_delete(request):
     basket = Basket(request)
@@ -800,7 +855,6 @@ def basket_delete(request):
         baskettotal = basket.get_total_price()
         response = JsonResponse({'qty': basketqty, 'subtotal': baskettotal})
         return response
-
 
 def basket_update(request):
     basket = Basket(request)

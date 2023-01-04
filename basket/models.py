@@ -15,11 +15,12 @@ class Basket(models.Model):
     class Meta:
         db_table = 'basket'
     productqty = models.IntegerField(default=0)
+    basketqty = models.IntegerField(default=0)
     productid = models.ForeignKey(prodProduct, on_delete=models.CASCADE)
     Person_fk = models.ForeignKey(Person, on_delete=models.CASCADE)
     
-    # def save(self):
-    #     super().save()
+    def save(self):
+        super().save()
     
     # def deleteProduct(self):
     #     super().delete()

@@ -23,6 +23,7 @@ class prodProduct(models.Model):
     productDesc = models.CharField(max_length=1500,blank=True)
     productCategory = models.CharField(max_length=255, blank=True)
     productPrice = models.DecimalField(max_digits=4, decimal_places=2)
+    productStock = models.IntegerField(default=0)
     productPhoto = models.ImageField(upload_to ='images/', null=True)
     productRating = models.IntegerField(default=0)
     timePosted = models.DateTimeField(default=datetime.now, blank=True)

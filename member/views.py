@@ -694,9 +694,10 @@ def deleteBooking(request,fk1):
 def mainMarketplace(request):
     try:
         marketplace=prodProduct.objects.all()
+        allBasket=Basket.objects.all()
         person = Person.objects.filter(Email=request.session['Email'])
         user=Person.objects.all()
-        return render(request,'MainMarketplace.html',{'marketplace':marketplace, 'person':person, 'user':user})
+        return render(request,'MainMarketplace.html',{'marketplace':marketplace, 'allBasket':allBasket, 'person':person, 'user':user})
     except prodProduct.DoesNotExist:
         raise Http404('Data does not exist')
 
@@ -731,6 +732,7 @@ def sellProduct(request, fk1):
         product.productDesc=request.POST.get('productDesc')
         product.productPrice=request.POST.get('productPrice')
         product.productCategory=request.POST.get('productCategory')
+        product.productStock=request.POST.get('productStock')
         
         if len(request.FILES) != 0:
             product.productPhoto=request.FILES['productPhoto']
@@ -803,10 +805,30 @@ def payment(request):
             intent = stripe.PaymentIntent.create(
                 amount=total,
         )
+            
+# def process_payment(request, product_id, quantity):
+#     # Retrieve the product from the database
+#     product = prodProduct.objects.get(pk=product_id)
+#     # Calculate the updated product stock
+#     updated_stock = product.productStock - quantity
+#     # Save the updated stock back to the database
+#     product.productStock = updated_stock
+#     product.save()
+#     # Process the payment (omitted for brevity)
 
 def basket_summary(request):
     basket = Basket(request)
     return render(request, 'summary.html', {'basket': basket})
+
+def summary(request):
+    try:
+        product=prodProduct.objects.all()
+        allBasket=Basket.objects.all()
+        person=Person.objects.filter(Email=request.session['Email'])
+        user=Person.objects.all()
+        return render(request,'summary.html',{'basket':allBasket, 'product':product, 'person':person, 'user':user})
+    except prodProduct.DoesNotExist:
+        raise Http404('Data does not exist')
 
 def basket_add(request, fk1,fk2):
     # basket = Basket(request)

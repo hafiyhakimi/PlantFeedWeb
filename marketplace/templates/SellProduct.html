@@ -86,6 +86,8 @@
                             <div class="col-12">
                               <label for="productCategory">Category</label><br>
                               <select id="productCategory" name="productCategory">
+                                <option value="None Selected">None Selected</option>
+                                <option value="Fruit">Fruit</option>
                                 <option value="Seed">Seed</option>
                                 <option value="Pest Control">Pest Control</option>
                                 <option value="Sapling">Sapling</option>
@@ -94,8 +96,12 @@
                               </select>
                             </div>
                             <div class="col-12">
-                              <label for="inputTitle" class="form-label">Product Price</label>
-                              <input type="text" class="form-control" id="title" placeholder="RM" name="productPrice" value="{{ prodProduct.productPrice }}">
+                              <label for="inputPrice" class="form-label">Product Price</label>
+                              <input type="text" class="form-control" id="price" placeholder="RM" name="productPrice" value="{{ prodProduct.productPrice }}">
+                            </div>
+                            <div class="col-12">
+                              <label for="inputStock" class="form-label">Stock Available</label>
+                              <input type="text" class="form-control" id="stock" placeholder="Enter Stock Number" name="productStock" value="{{ prodProduct.productStock }}">
                             </div>
                             <br/><br/>
                             <div class="col-12">

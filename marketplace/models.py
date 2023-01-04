@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models, migrations
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -36,6 +37,17 @@ class prodProduct(models.Model):
     def deleteProduct(self):
         super().delete()
 
+    # def get_total_price(self):
+
+    #     subtotal = sum(Decimal(item['price']) * item['qty'] for item in self.marketplace.models.values())
+
+    #     if subtotal == 0:
+    #         shipping = Decimal(0.00)
+    #     else:
+    #         shipping = Decimal(11.50)
+
+    #     total = subtotal + Decimal(shipping)
+    #     return total
 # class productComment(models.Model):
 #     class Meta:
 #         db_table = 'productComment'    

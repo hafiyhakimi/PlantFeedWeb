@@ -172,7 +172,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-LOGIN_REDIRECT_URL = 'login.html',
+LOGIN_REDIRECT_URL = 'Home'
+LOGIN_URL = 'Loginpage'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -189,4 +190,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Default.primary.key.field.type
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+os.environ.setdefault('STRIPE_PUBLISHABLE_KEY', 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y')
+STRIPE_SECRET_KEY = 'sk_test_51M4MnSIMiEP0GJmrJOwq2TQrafZ2oqouLNRedS8aU0uIqv47JtlR2Hf9lktkAjMbNcvuKbHkcFX6s5DBERkjJ83E00Tr4qRj14'
 #AUTH_USER_MODEL = 'member.Person'

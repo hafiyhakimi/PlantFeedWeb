@@ -1,5 +1,7 @@
 from datetime import time
+from decimal import Decimal
 from io import StringIO
+from django.conf import settings
 from django.http.response import Http404
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 # from django.shortcuts import pyrebase
@@ -794,17 +796,63 @@ def updateProduct(request,fk1):
         return render(request,'ViewMarketplace.html',{'MarketplaceFeed':MarketplaceFeed, 'person':person})  
 
 
-def payment(request):
-        try:
-            data=Payment.objects.all()
-            return render(request,'Payment.html',{'data':data})
-        except Payment.DoesNotExist:
-            raise Http404('Data does not exist')
+# def payment(request):
+#         try:
+#             data=Payment.objects.all()
+#             return render(request,'Payment.html',{'data':data})
+#         except Payment.DoesNotExist:
+#             raise Http404('Data does not exist')
 
-            stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
-            intent = stripe.PaymentIntent.create(
-                amount=total,
+#             stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
+#             intent = stripe.PaymentIntent.create(
+#                 amount=total,
+#         )
+
+#PAYMENT VIEW
+def order_placed(request):
+    basket = Basket(request)
+    basket.clear()
+    return render(request, 'payment/orderplaced.html')
+
+
+class Error(TemplateView):
+    template_name = 'payment/error.html'
+
+
+# @login_required
+def BasketView(request):
+
+    product=prodProduct.objects.all()
+    allBasket=Basket.objects.all()
+    person=Person.objects.filter(Email=request.session['Email'])
+    user=Person.objects.all()
+    basket = Basket(request)
+    total = str(basket.get_total_price())
+    total = total.replace('.', '')
+    total = int(total)
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    intent = stripe.PaymentIntent.create(
+        amount=total,
+        currency='myr',
+        metadata={'userid': request.user.id}
+    )
+
+    return render(request, 'payment.html', {'client_secret': intent.client_secret, 'basket':allBasket, 'product':product, 'person':person, 'user':user,
+                                                            'STRIPE_PUBLISHABLE_KEY': os.environ.get('STRIPE_PUBLISHABLE_KEY')})
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    event = None
+
+    try:
+        event = stripe.Event.construct_from(
+            json.loads(payload), stripe.api_key
         )
+    except ValueError as e:
+        print(e)
+        return HttpResponse(status=400)
             
 # def process_payment(request, product_id, quantity):
 #     # Retrieve the product from the database
@@ -816,6 +864,7 @@ def payment(request):
 #     product.save()
 #     # Process the payment (omitted for brevity)
 
+#BASKET VIEW
 def basket_summary(request):
     basket = Basket(request)
     return render(request, 'summary.html', {'basket': basket})

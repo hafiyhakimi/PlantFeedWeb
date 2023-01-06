@@ -80,7 +80,7 @@ urlpatterns = [
     
     path('basket_add/<str:fk1>/<str:fk2>/',views.basket_add, name='basket_add'),
     path('add_to_basket/<str:fk1>/<str:fk2>/',views.add_to_basket, name='add_to_basket'),
-    path('summary/', views.basket_summary, name='basket_summary'),
+    # path('summary/', views.basket_summary, name='basket_summary'),
     
     path('MainMember.html', views.mainMember, name="MainMember"),
     path('member.html',views.member, name="member"),
@@ -97,12 +97,13 @@ urlpatterns = [
     path('deleteWorkshop.html/<str:fk1>/',views.deleteWorkshop, name="deleteWorkshop"),
     path('deleteBooking.html/<str:fk1>/',views.deleteBooking, name="deleteBooking"),
     
-    path('payment.html', views.BasketView, name='basket'),
+    path('Payment.html/<str:fk1>/', views.BasketView, name='basket'),
     path('orderplaced/', views.order_placed, name='order_placed'),
     path('error/', views.Error.as_view(), name='error'),
     path('webhook/', views.stripe_webhook),
 
     path('summary.html', views.basket_summary, name='basket_summary'),
+    path('summary.html', views.summary, name='summary'),
     path('add/', views.basket_add, name='basket_add'),
     path('delete/', views.basket_delete, name='basket_delete'),
     path('update/', views.basket_update, name='basket_update'),

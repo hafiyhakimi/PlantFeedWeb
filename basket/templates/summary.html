@@ -88,9 +88,8 @@
     </ul>
   </div>
 <br/>
-{% load static %}
-{% block content %}
 
+{% block content %}
 <div class="container">
   <div class="col-12">
     <h1 class="h2">Your Basket</h1>
@@ -133,48 +132,50 @@
       </div> {% endcomment %}
       <div class="text-end">
         <div class="">Sub Total: <span class="fw-bold">RM</span>
-          <div id="subtotal" class="d-inline-flex fw-bold">{{basket.get_subtotal_price}}</div>
+          <div id="subtotal" class="d-inline-flex fw-bold">{{subtotal}}</div>
         </div>
         <div id="">Shipping <span class="small">(Next day delivery)</span>: <span class="fw-bold">RM5.00</span></div>
         <div class="pt-2">Total to pay: <span class="fw-bold">RM</span><span id="total"
-            class="fw-bold h5">{{basket.get_total_price}}</span></div>
+            class="fw-bold h5">{{totalprice}}</span></div>
+        </div>
       </div>
-    </div>
     <div class="col-md-5 col-lg-4 order-md-last p-0 order-3">
-      <div class="d-grid gap-2 ">
-        <a role="button" href="{% url 'basket' %}" class="btn btn-success fw-bold" type="button">Checkout</a>
-      </div>
+      {% for product in product %}
+        <div class="d-grid gap-2 ">
+          <a role="button" href="{% url 'basket' product.productid %}" class="btn btn-success fw-bold" type="button">Checkout</a>
+        </div>
+      {% endfor %}
     </div>
     <div class="col-md-7 col-lg-8 p-0">
-      {% for allBasket in allBasket %}
-      {% for product in product %}
-      {% if allBasket.productid == product.productid and allBasket.person_fk.Email == request.session.Email %}
-        <div class="card mb-3 border-0 product-item">
-          <div class="row g-0">
-            <div class="col-md-2 d-none d-md-block">
-              <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ product.productPhoto }}" />
-            </div>
-            <div class="col-md-10 ps-md-3">
-              <div class="card-body p-1">
-                <p class="card-text pb-3">{{ product.productName }}</p>
-                <label for="select">Qty</label>
-                <select id="productqty" style="width:50px;height:31px;">
-                  <option value="" selected disabled hidden>1</option>
-                  <option value="">1</option>
-                  <option value="">2</option>
-                  <option value="">3</option>
-                  <option value="">4</option>
-                </select>
-                <a type="button" id="update-button" data-index="{{product.productid}}"
-                  class="update-button text-decoration-none small ps-3">Update</a>
-                <a type="button" id="delete-button" data-index="{{product.productid}}"
-                  class="delete-button text-decoration-none small">Delete</a>
+      {% for all_basket in all_basket %}
+        {% for item in product %}
+          {% if all_basket.productid_id == item.productid and all_basket.Person_fk_id.Email == request.session.Email %}
+            <div class="card mb-3 border-0 product-item">
+              <div class="row g-0">
+                <div class="col-md-2 d-none d-md-block">
+                  <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ item.productPhoto }}" />
+                </div>
+                <div class="col-md-10 ps-md-3">
+                  <div class="card-body p-1">
+                    <p class="card-text pb-3">{{ item.productName }}</p>
+                    <label for="select">Qty</label>
+                    <select id="productqty" style="width:50px;height:31px;">
+                      <option value="" selected disabled hidden>1</option>
+                      <option value="">1</option>
+                      <option value="">2</option>
+                      <option value="">3</option>
+                      <option value="">4</option>
+                    </select>
+                    <a type="button" id="update-button" data-index="{{item.productid}}"
+                      class="update-button text-decoration-none small ps-3">Update</a>
+                    <a type="button" id="delete-button" data-index="{{item.productid}}"
+                      class="delete-button text-decoration-none small">Delete</a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      {% endif %}
-      {% endfor %}
+          {% endif %}
+        {% endfor %}
       {% endfor %}
       {% comment %} {% for product_id, product in basket.items %}
       {% for item in basket %}
@@ -212,7 +213,7 @@
   </div>
 </div>
 
-<script>
+{% comment %} <script>
   // Delete Item
   $(document).on("click", ".delete-button", function (e) {
     e.preventDefault();
@@ -267,7 +268,7 @@
       error: function (xhr, errmsg, err) {},
     });
   });
-</script>
+</script> {% endcomment %}
 
 {% endif %}
 {% endblock %}

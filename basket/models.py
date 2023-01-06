@@ -15,7 +15,6 @@ class Basket(models.Model):
     class Meta:
         db_table = 'basket'
     productqty = models.IntegerField(default=0)
-    basketqty = models.IntegerField(default=0)
     productid = models.ForeignKey(prodProduct, on_delete=models.CASCADE)
     Person_fk = models.ForeignKey(Person, on_delete=models.CASCADE)
     
@@ -25,12 +24,15 @@ class Basket(models.Model):
     # def deleteProduct(self):
     #     super().delete()
 
-    def __init__(self, request):
-        self.session = request.session
-        basket = self.session.get(settings.BASKET_SESSION_ID)
-        if settings.BASKET_SESSION_ID not in request.session:
-            basket = self.session[settings.BASKET_SESSION_ID] = {}
-        self.basket = basket
+    # def __init__(self, productqty, productid, Person_fk):
+    #     # self.session = request.session
+    #     # basket = self.session.get(settings.BASKET_SESSION_ID)
+    #     # if settings.BASKET_SESSION_ID not in request.session:
+    #     #     basket = self.session[settings.BASKET_SESSION_ID] = {}
+    #     # self.basket = basket
+    #     self.productqty = productqty
+    #     self.productid = productid
+    #     self.Person_fk = Person_fk
 
     # def add(self, product, qty=1, update_qty=False):
     #     """
@@ -79,9 +81,10 @@ class Basket(models.Model):
     def get_subtotal_price(self):
         return sum(Decimal(item['productPrice']) * item['productqty'] for item in self.basket.values())
 
-    def get_total_price(self):
-
-        subtotal = sum(Decimal(item['productPrice']) * item['productqty'] for item in self.basket.values())
+    def get_total_price(self, fk1):
+        product = prodProduct.objects.get(pk=fk1)
+        basket = Basket.objects.all()
+        subtotal = sum(Decimal(product['productPrice']) * basket['productqty'])
 
         if subtotal == 0:
             shipping = Decimal(0.00)

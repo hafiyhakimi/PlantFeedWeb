@@ -87,18 +87,16 @@
         <a class="nav-link active" id="marketplace-tab" data-bs-toggle="tab" href="{% url 'MainMarketplace' %}" role="tab" aria-controls="marketplace" aria-selected="true">Marketplace</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a type="button" role="button" href="{% url 'basket:basket_summary' %}"
+        <a type="button" role="button" href="{% url 'summary' %}"
           class="btn btn-outline-secondary border-0 basket-btn">
 
-          {% with basketqty=allBasket.count %}
           <div id="basket-qty" class="basket-qty">
-            {% if basketqty > 0 %}
-            {{ basketqty }}
+            {% if allBasket.count > 0 %}
+              {{ allBasket.count }}
             {% else %}
             0
             {% endif %}
           </div>
-          {% endwith %}
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-cart3"
               viewBox="0 0 16 16">

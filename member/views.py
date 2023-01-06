@@ -820,14 +820,14 @@ class Error(TemplateView):
 
 
 # @login_required
-def BasketView(request):
+def BasketView(request, fk1):
 
     product=prodProduct.objects.all()
     allBasket=Basket.objects.all()
     person=Person.objects.filter(Email=request.session['Email'])
     user=Person.objects.all()
     basket = Basket(request)
-    total = str(basket.get_total_price())
+    total = str(basket.get_total_price(fk1))
     total = total.replace('.', '')
     total = int(total)
 
@@ -838,7 +838,7 @@ def BasketView(request):
         metadata={'userid': request.user.id}
     )
 
-    return render(request, 'payment.html', {'client_secret': intent.client_secret, 'basket':allBasket, 'product':product, 'person':person, 'user':user,
+    return render(request, 'payment/Payment.html', {'client_secret': intent.client_secret, 'basket':allBasket, 'product':product, 'person':person, 'user':user,
                                                             'STRIPE_PUBLISHABLE_KEY': os.environ.get('STRIPE_PUBLISHABLE_KEY')})
 
 @csrf_exempt
@@ -868,14 +868,24 @@ def stripe_webhook(request):
 def basket_summary(request):
     basket = Basket(request)
     return render(request, 'summary.html', {'basket': basket})
-
+    
 def summary(request):
     try:
         product=prodProduct.objects.all()
         allBasket=Basket.objects.all()
         person=Person.objects.filter(Email=request.session['Email'])
         user=Person.objects.all()
-        return render(request,'summary.html',{'basket':allBasket, 'product':product, 'person':person, 'user':user})
+        totalprice = allBasket.get_total_price(1)
+        subtotal = allBasket.get_subtotal_price(1)
+        context = {
+            'allBasket': allBasket,
+            'product': product,
+            'person': person,
+            'user': user,
+            'totalprice': totalprice,
+            'subtotal': subtotal
+        }
+        return render(request,'summary.html', context)
     except prodProduct.DoesNotExist:
         raise Http404('Data does not exist')
 

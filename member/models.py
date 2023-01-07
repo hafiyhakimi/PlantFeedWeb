@@ -37,9 +37,27 @@ class Person(models.Model):
     Gender = models.CharField(max_length=1)
     MaritalStatus = models.CharField(max_length=150)
     UserLevel = models.CharField(max_length=10)
-    Photo = models.ImageField(upload_to ='images/')
+    Photo = models.ImageField(upload_to ='images/', null=True)
     #resume = models.ImageField(null=True, blank=True)
+    
+    # def upload_photo(self, filename):
+    #     path = 'media/uploads/{}'.format(filename)
+    #     return path
 
+    # Photo = models.ImageField(upload_to='uploads/', null=True, blank=True)
+
+    # class Meta:
+    #     db_table = 'login_person'
+
+    # def save(self):
+    #     super().save()
+    #     self.pk=None
+    
+    # def user_form(sender, instance, created, **kwargs):
+    #     if created:
+    #         Person.objects.create(user=instance)
+    #         instance.Person.save()
+            
     @property
     def is_anonymous(self):
    
@@ -51,7 +69,6 @@ class Person(models.Model):
 
     def save(self):
         super().save()
-        super().save(using='farming')
 
     class Meta:
         db_table = 'login_person'
@@ -62,10 +79,10 @@ class Person(models.Model):
     USERNAME_FIELD = 'Email'
     REQUIRED_FIELDS = ['username']
         
-def user_form(sender, instance, created, **kwargs):
-    if created:
-        Person.objects.create(user=instance)
-        instance.Person.save()
+    def user_form(sender, instance, created, **kwargs):
+        if created:
+            Person.objects.create(user=instance)
+            instance.Person.save()
 
 class Member(models.Model):
     class Meta:

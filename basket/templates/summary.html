@@ -140,11 +140,9 @@
         </div>
       </div>
     <div class="col-md-5 col-lg-4 order-md-last p-0 order-3">
-      {% for product in product %}
         <div class="d-grid gap-2 ">
-          <a role="button" href="{% url 'basket' product.productid %}" class="btn btn-success fw-bold" type="button">Checkout</a>
+          <a role="button" href="{% url 'basket' %}" class="btn btn-success fw-bold" type="button">Checkout</a>
         </div>
-      {% endfor %}
     </div>
     <div class="col-md-7 col-lg-8 p-0">
       {% for all_basket in all_basket %}

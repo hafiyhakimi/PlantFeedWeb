@@ -8,10 +8,7 @@ from member.models import Person
 
 
 class Basket(models.Model):
-    """
-    A base Basket class, providing some default behaviors that
-    can be inherited or overrided, as necessary.
-    """
+
     class Meta:
         db_table = 'basket'
     productqty = models.IntegerField(default=0)
@@ -21,6 +18,16 @@ class Basket(models.Model):
     def save(self):
         super().save()
     
+    def get_subtotal_price(self, fk1):
+        basket_items = Basket.objects.select_related('product').filter(product__pk=fk1)
+        subtotal = sum(Decimal(item.product.productPrice) * item.productqty for item in basket_items)
+        return subtotal
+
+    def get_total_price(self, fk1):
+        subtotal = self.get_subtotal_price(fk1)
+        SHIPPING_CHARGE = Decimal(3.00)
+        total = subtotal + SHIPPING_CHARGE
+        return total
     # def deleteProduct(self):
     #     super().delete()
 
@@ -78,21 +85,23 @@ class Basket(models.Model):
     #         self.basket[product_id]['qty'] = qty
     #     self.save()
 
-    def get_subtotal_price(self):
-        return sum(Decimal(item['productPrice']) * item['productqty'] for item in self.basket.values())
+    # def get_subtotal_price(self, fk1):
+    #     product = prodProduct.objects.get(pk=fk1)
+    #     basket = Basket.objects.all()
+    #     return sum(Decimal(product['productPrice']) * basket['productqty'])
 
-    def get_total_price(self, fk1):
-        product = prodProduct.objects.get(pk=fk1)
-        basket = Basket.objects.all()
-        subtotal = sum(Decimal(product['productPrice']) * basket['productqty'])
+    # def get_total_price(self, fk1):
+    #     product = prodProduct.objects.get(pk=fk1)
+    #     basket = Basket.objects.all()
+    #     subtotal = sum(Decimal(product['productPrice']) * basket['productqty'])
 
-        if subtotal == 0:
-            shipping = Decimal(0.00)
-        else:
-            shipping = Decimal(3.00)
+    #     if subtotal == 0:
+    #         shipping = Decimal(0.00)
+    #     else:
+    #         shipping = Decimal(3.00)
 
-        total = subtotal + Decimal(shipping)
-        return total
+    #     total = subtotal + Decimal(shipping)
+    #     return total
 
     # def delete(self, product):
     #     """

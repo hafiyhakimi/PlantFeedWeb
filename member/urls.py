@@ -97,7 +97,7 @@ urlpatterns = [
     path('deleteWorkshop.html/<str:fk1>/',views.deleteWorkshop, name="deleteWorkshop"),
     path('deleteBooking.html/<str:fk1>/',views.deleteBooking, name="deleteBooking"),
     
-    path('Payment.html/<str:fk1>/', views.BasketView, name='basket'),
+    path('Payment.html', views.BasketView, name='basket'),
     path('orderplaced/', views.order_placed, name='order_placed'),
     path('error/', views.Error.as_view(), name='error'),
     path('webhook/', views.stripe_webhook),

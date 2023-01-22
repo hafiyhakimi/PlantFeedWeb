@@ -5,13 +5,14 @@
           margin: auto;
           overflow-x: hidden;
           width: 200px;
-                }
-        table{
+        }
+
+        table {
           border:4px solid black;
           margin: 0 auto;
           padding: 40px;
           width: fit-content;
-            }
+        }
 
         img {
           max-width: 100%;
@@ -32,7 +33,7 @@
 
         .account-form input
         {
-              border: 2px solid #ccc; height: calc(2em + .75rem + 2px);
+          border: 2px solid #ccc; height: calc(2em + .75rem + 2px);
         }
 
         .form-control {
@@ -44,6 +45,20 @@
           box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075), 0 0 0px rgba(255, 0, 0, 0.6);
         }
         
+        .img-container {
+          position: relative;
+          overflow:hidden;
+          height: 300px;
+        }
+
+        .img-container img {
+          position: absolute;
+          top:0;
+          left:0;
+          width: 100%;
+          height:100%;
+          object-fit: cover
+        }
       </style>
 
 </head>
@@ -74,15 +89,15 @@
         <a class="nav-link active" id="discussion-tab" data-bs-toggle="tab" href="{% url 'MainGroup' %}" role="tab" aria-controls="discussion" aria-selected="true">Group</a>
       </li>
       <li class="nav-item" role="presentation">
-       <a class="nav-link active" id="friends-tab" data-bs-toggle="tab" href="{% url 'MainMember' %}" role="tab" aria-controls="friends" aria-selected="true">Member</a>
+        <a class="nav-link active" id="friends-tab" data-bs-toggle="tab" href="{% url 'MainMember' %}" role="tab" aria-controls="friends" aria-selected="true">Member</a>
       </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link active" id="workshop-tab" data-bs-toggle="tab" href="{% url 'BookWorkshop' %}"role="tab" aria-controls="workshop" aria-selected="true">Workshop</a>
-       </li>
-       <li class="nav-item" role="presentation">
+      </li>
+      <li class="nav-item" role="presentation">
         <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="{% url 'View' %}" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
-       </li>
-       <li class="nav-item" role="presentation">
+      </li>
+      <li class="nav-item" role="presentation">
         <a class="nav-link active" id="marketplace-tab" data-bs-toggle="tab" href="{% url 'MainMarketplace' %}" role="tab" aria-controls="marketplace" aria-selected="true">Marketplace</a>
       </li>
     </ul>
@@ -105,32 +120,15 @@
     <div class="col-12">Your basket is empty <a href="{% url 'MainMarketplace' %}">Shop</a></div>
     {% else %}
     <div class="col-12 bg-light p-3 d-flex justify-content-between">
-      <div class="dropdown">
+      {% comment %} <div class="dropdown">
         <button class="btn btn-success fw-bold" type="button" id="dropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Shipping options
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
           </svg>
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownLink">
-          <a class="dropdown-item" href="#">Next day delivery</a>
-          <a class="dropdown-item" href="#">Premium delivery</a>
-        </div>
-      </div>
-      <!-- {% comment %} <div class="d-flex d-flex-inline">
-        <div class="pe-3">Order<br></div>
-        <div class="dropdown">
-          <a class="text-reset text-decoration-none dropdown-toggle" role="link" id="dropdownLink"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Shipping options
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownLink">
-            <li class="item small">Next day delivery</li>
-            <li class="item small">Premimum delivery</li>
-          </ul>
-        </div>
-      </div> {% endcomment %} -->
-      <div class="text-end">
+      </div> {% endcomment %}
+      {% comment %} <div class="text-end">
         <div class="">Sub Total: <span class="fw-bold">RM</span>
           <div id="subtotal" class="d-inline-flex fw-bold">{{ basket.get_subtotal_price }}</div>
         </div>
@@ -138,135 +136,254 @@
         <div class="pt-2">Total to pay: <span class="fw-bold">RM</span><span id="total"
             class="fw-bold h5">{{ basket.get_total_price }}</span></div>
         </div>
-      </div>
+      </div> {% endcomment %}
     <div class="col-md-5 col-lg-4 order-md-last p-0 order-3">
         <div class="d-grid gap-2 ">
-          <a role="button" href="{% url 'basket' %}" class="btn btn-success fw-bold" type="button">Checkout</a>
+          {% comment %} <a role="button" href="{% url 'basket' %}" class="btn btn-success fw-bold" type="button">Checkout</a> {% endcomment %}
+          {% comment %} <a role="button" href="{% url 'pay' %}" class="btn btn-success fw-bold" type="button">Checkout</a> {% endcomment %}
+        
+
+
+
+
+
+<!-- Button trigger modal -->
+
+
+
+
+
+
+
         </div>
     </div>
     <div class="col-md-7 col-lg-8 p-0">
-      {% for all_basket in all_basket %}
-        {% for item in product %}
-          {% if all_basket.productid_id == item.productid and all_basket.Person_fk_id.Email == request.session.Email %}
-            <div class="card mb-3 border-0 product-item">
-              <div class="row g-0">
-                <div class="col-md-2 d-none d-md-block">
-                  <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ item.productPhoto }}" />
-                </div>
-                <div class="col-md-10 ps-md-3">
-                  <div class="card-body p-1">
-                    <p class="card-text pb-3">{{ item.productName }}</p>
-                    <label for="select">Qty</label>
-                    <select id="productqty" style="width:50px;height:31px;">
-                      <option value="" selected disabled hidden>1</option>
-                      <option value="">1</option>
-                      <option value="">2</option>
-                      <option value="">3</option>
-                      <option value="">4</option>
-                    </select>
-                    <a type="button" id="update-button" data-index="{{item.productid}}"
-                      class="update-button text-decoration-none small ps-3">Update</a>
-                    <a type="button" id="delete-button" data-index="{{item.productid}}"
-                      class="delete-button text-decoration-none small">Delete</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
-      {% comment %} {% for product_id, product in basket.items %}
-      {% for item in basket %}
-      {% with product=item.product %}
-      <div class="card mb-3 border-0 product-item" data-index="{{product.id}}">
+
+      {% for bas in allBasket %}
+      <div class="card mb-3 border-0 product-item">
         <div class="row g-0">
           <div class="col-md-2 d-none d-md-block">
-            <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ product.image.url }}" />
+            <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ bas.productid.productPhoto }}" />
           </div>
           <div class="col-md-10 ps-md-3">
             <div class="card-body p-1">
-              <a class="text-decoration-none text-reset" href="{{item.product.get_absolute_url}}">
-                <p class="card-text pb-3">{{product.title}}</p>
-              </a>
+              <p class="card-text pb-3">{{ bas.productid.productName }}</p>
+              <p class="card-text pb-3">RM {{ bas.productid.productPrice }}</p>
               <label for="select">Qty</label>
-              <select id="select{{product.id}}" style="width:50px;height:31px;">
-                <option value="" selected disabled hidden>{{item.qty}}</option>
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
-              </select>
-              <a type="button" id="update-button" data-index="{{product.id}}"
-                class="update-button text-decoration-none small ps-3">Update</a>
-              <a type="button" id="delete-button" data-index="{{product.id}}"
+              <div class="mb-3">
+                <div class="d-flex gap-2">
+                <button class="btn" data-id="{{ bas.id }}" onclick="removeQTY(this)">
+                  -
+                  </button>
+                  <input type="text"
+                    class="form-control" value="{{ bas.productqty }}">
+                    <button class="btn" data-id="{{ bas.id }}" onclick="addQTY(this)">
+                      +
+                      </button>
+              </div>
+                <br>
+              <a type="button" id="delete-button" data-index="{{item.productid}}"
                 class="delete-button text-decoration-none small">Delete</a>
             </div>
           </div>
         </div>
       </div>
-      {% endwith %}
+
+    
+  
       {% endfor %}
-      {% endfor %} {% endcomment %}
+
+
+
+    <br>
+
+    Subtotal : RM{{ total }}
+    <br>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Checkout
+      </button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Checkout</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form class="needs-validation" action="{% url 'pay' %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+              
+              <div class="col-md-12 mb-3">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="" value="" required="">
+                
+              </div>
+            </div>
+
+          
+            <div class="mb-3">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" required="">
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+           
+            <h4 class="mb-3">Payment</h4>
+
+            <div class="d-block my-3">
+              <div class="custom-control custom-radio">
+                <input id="credit" name="payment" type="radio" class="custom-control-input" checked="" required="">
+                <label class="custom-control-label" for="credit">Credit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="debit" name="payment" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="debit">Debit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="paypal" name="payment" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="paypal">Paypal</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="cc-name">Name on card</label>
+                <input type="text" class="form-control" id="cc-name" name="namecard" placeholder="" required="">
+                <small class="text-muted">Full name as displayed on card</small>
+                <div class="invalid-feedback">
+                  Name on card is required
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="cc-number">Credit card number</label>
+                <input type="text" class="form-control" id="cc-number" name="creditnumber" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Credit card number is required
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="cc-expiration">Expiration</label>
+                <input type="text" class="form-control" id="cc-expiration" name="expiration" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Expiration date required
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="cc-expiration">CVV</label>
+                <input type="text" class="form-control" id="cc-cvv" name="cvv" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Security code required
+                </div>
+              </div>
+            </div>
+         
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Shipping</label>
+              <select class="form-control" name="shipping" id="shipping">
+                <option selected>Select Shipping</option>
+              
+                <option value="5" data-price="5">Next Day</option>
+                <option value="3" data-price="3">Premium</option>
+              </select>
+            </div>
+          
+            <br>
+            <p id="subtotal" data-price="{{ total }}">Subtotal : RM{{ total }}</p>
+            <p >Shipping Price : RM<span id="shippingprice">-</span></p>
+            <p >Total : RM<span id="total">-</span></p>
+            <input name="total" type="hidden" id="totalall">
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+          </form>
+      
+
+
+
+      </div>
+      
     </div>
   </div>
 </div>
 
-{% comment %} <script>
-  // Delete Item
-  $(document).on("click", ".delete-button", function (e) {
-    e.preventDefault();
-    var prodid = $(this).data("index");
-    $.ajax({
-      type: "POST",
-      url: '{% url "basket:basket_delete" %}',
-      data: {
-        productid: $(this).data("index"),
-        csrfmiddlewaretoken: "{{csrf_token}}",
-        action: "post",
-      },
-      success: function (json) {
-        $('.product-item[data-index="' + prodid + '"]').remove();
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
 
-        if (json.qty == 0) {
-          total = 0
-          subtotal = 0
-        } else {
-          total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-          subtotal = json.subtotal
-        }
+<script>
 
-        document.getElementById("subtotal").innerHTML = subtotal;
-        document.getElementById("basket-qty").innerHTML = json.qty;
-        document.getElementById("total").innerHTML = total;
-      },
-      error: function (xhr, errmsg, err) {},
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
+function removeQTY(e) {
+  
+  const csrftoken = getCookie('csrftoken');
+
+    $.ajax({ 
+      url: '/remove_from_cart/',
+      type: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {"item_id": e.getAttribute('data-id'),},
+      success: function () {
+        location.reload();
+      }
     });
-  });
+  };
 
-  // Update Item
-  $(document).on("click", ".update-button", function (e) {
-    e.preventDefault();
-    var prodid = $(this).data("index");
-    $.ajax({
-      type: "POST",
-      url: '{% url "basket:basket_update" %}',
-      data: {
-        productid: $(this).data("index"),
-        productqty: $("#select" + prodid + " option:selected").text(),
-        csrfmiddlewaretoken: "{{csrf_token}}",
-        action: "post",
-      },
-      success: function (json) {
 
-        total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-        document.getElementById("basket-qty").innerHTML = json.qty;
-        document.getElementById("subtotal").innerHTML = json.subtotal;
-        document.getElementById("total").innerHTML = total;
-      },
-      error: function (xhr, errmsg, err) {},
+function addQTY(e) {
+  const csrftoken = getCookie('csrftoken');
+
+    $.ajax({ 
+      url: '/add_from_cart/',
+      type: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {"item_id": e.getAttribute('data-id'),},
+      success: function () {
+        location.reload();
+      }
     });
-  });
-</script> {% endcomment %}
+}
 
-{% endif %}
+$('#shipping').on('change', function() {
+    $('#shippingprice').html(parseFloat(this.value))
+    $('#total').html(parseFloat(this.value) + parseFloat($('#subtotal').data('price')))
+
+    $('#totalall').val(parseFloat(this.value) + parseFloat($('#subtotal').data('price')))
+});
+</script>
 {% endblock %}

@@ -1,21 +1,7 @@
-"""LOGIN URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.urls import path
 from django.urls import re_path as url, include
-#from LOGIN import views
+
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -24,26 +10,14 @@ from rest_framework import authentication
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from group.views import updateGroup
-#from .views import MyObtainTokenPairView, user_list
+
 from rest_framework.authtoken.views import obtain_auth_token
 from member.api import UserAuthentication, UserList
-#from LOGIN.views import UserReg, sharing, discussion, view, workshop, booking, member
 from .import views
 from .import api
-# from .import index
-#from member import views
-#from rest_framework import routers
-
-#router = routers.DefaultRouter(trailing_slash=False) 
-#router.register('Userdetails', views.Users)
 
 
 urlpatterns = [
-
-    #url(r'^admin/', admin.site.urls),
-    #url(r'^$',views.signIn, name="SignIn"),
-    #url('sign',views.signUp),
-    #path('registration.html',views.signUp, name="signUp"),
     url('^postsign/',views.postsign),
     path('',views.Indexpage),
     path('Home',views.homepage, name="Home"),
@@ -98,12 +72,19 @@ urlpatterns = [
     path('deleteBooking.html/<str:fk1>/',views.deleteBooking, name="deleteBooking"),
     
     path('Payment.html', views.BasketView, name='basket'),
+    
+    path('pay', views.pay, name='pay'),
+    
     path('orderplaced/', views.order_placed, name='order_placed'),
     path('error/', views.Error.as_view(), name='error'),
     path('webhook/', views.stripe_webhook),
 
-    path('summary.html', views.basket_summary, name='basket_summary'),
+    path('summary_view.html', views.basket_summary, name='basket_summary'),
     path('summary.html', views.summary, name='summary'),
+    path('history.html', views.history, name='history'),
+    path('invoice.html/<str:fk1>/', views.invoice, name='invoice'),
+    path('remove_from_cart/', views.remove_from_cart, name='remove_from_cart'),
+    path('add_from_cart/', views.add_from_cart, name='add_from_cart'),
     path('add/', views.basket_add, name='basket_add'),
     path('delete/', views.basket_delete, name='basket_delete'),
     path('update/', views.basket_update, name='basket_update'),

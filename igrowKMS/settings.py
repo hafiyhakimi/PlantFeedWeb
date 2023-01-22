@@ -101,18 +101,18 @@ WSGI_APPLICATION = 'igrowKMS.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 AUTH_USER_MODEL='member.Person'
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'requirement',
+    #     'USER':'root',
+    #     'PASSWORD':'',
+    #     'HOST':'localhost',
+    #     'PORT':'3306',
+    #     'OPTIONS':{
+    #         'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+    #     }
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'igrow',
-        'USER':'root',
-        'PASSWORD':'',
-        'HOST':'localhost',
-        'PORT':'3306',
-        'OPTIONS':{
-            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
-        }
-    },
-    'farming': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'farming2',
         'USER':'root',

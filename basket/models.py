@@ -14,6 +14,8 @@ class Basket(models.Model):
     productqty = models.IntegerField(default=0)
     productid = models.ForeignKey(prodProduct, on_delete=models.CASCADE)
     Person_fk = models.ForeignKey(Person, on_delete=models.CASCADE)
+    is_checkout = models.BooleanField(default=0)
+    transaction_code = models.CharField(max_length=255,null=True)
     
     def save(self):
         super().save()

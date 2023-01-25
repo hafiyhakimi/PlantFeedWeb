@@ -58,7 +58,7 @@ urlpatterns = [
     #path('ViewSharing',views.viewSharing,name="ViewSharing"),
     path('ViewSharing.html/<str:fk1>/',views.updateSharing, name="UpdateSharing"),
     path('DeleteSharing.html/<str:fk1>/', views.deleteSharing, name="DeleteSharing"),
-
+   
     path('MainGroup.html',views.mainGroup, name="MainGroup"),
     path('group.html/<str:fk1>/',views.group, name="Group"),
     path('MyGroup.html',views.myGroup, name="MyGroup"),

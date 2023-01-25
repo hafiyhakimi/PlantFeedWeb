@@ -69,12 +69,6 @@ def deryptPassword(Pwd):
          decrypted = fernet.decrypt(Pwd).decode()
          return decrypted
 
-
-
-
-
-
-
 def signIn(request):
     if request.method=='POST':
         email = request.POST.get("email")

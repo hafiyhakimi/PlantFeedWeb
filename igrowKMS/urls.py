@@ -31,6 +31,7 @@ urlpatterns = [
     path('', include('marketplace.urls')),
     path('', include('payment.urls')),
     path('', include('basket.urls')),
+    path('', include('topic.urls')),
     #path('auth/', include('auth.urls')),
     #path('api/', include('member.urls')),
 ]

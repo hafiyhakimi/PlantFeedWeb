@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.urls import path
 from django.urls import re_path as url, include
-#from LOGIN import views
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -53,6 +52,12 @@ urlpatterns = [
     path('Logout',views.logout, name="Logout"),
     path('View',views.view,name="View"),
 
+    path('selectTopic',views.selectTopic,name="selectTopic"),
+    path('viewSelectedTopic',views.viewSelectedTopic,name="viewSelectedTopic"),
+    path('updateSelectedTopic',views.updateSelectedTopic,name="updateSelectedTopic"),
+    path('suggestNewTopic',views.suggestNewTopic,name="suggestNewTopic"),
+    path('Managetopic', views.managetopic, name="Managetopic"),
+ 
     path('MainSharing.html',views.mainSharing, name="MainSharing"),
     path('sharing.html/<str:fk1>/',views.sharing, name="Sharing"),
     #path('ViewSharing',views.viewSharing,name="ViewSharing"),

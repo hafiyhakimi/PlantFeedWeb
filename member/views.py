@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django import forms
+from django.utils import timezone
+from django.db.models import Sum
 #from firebase_admin import firestore
 #from firebase_admin.auth import UidIdentifier, UserIdentifier
 #from pyasn1_modules.rfc2459 import UserNotice
@@ -55,7 +57,8 @@ from django.views.generic.base import TemplateView
 from orders.views import payment_confirmation
 from django.views.decorators.csrf import csrf_exempt
 
-from orders.models import Order, OrderItem
+# from orders.models import Order, OrderItem
+from member.models import Order
  
 def encryptPassword(Pwd):
          key = Fernet.generate_key()
@@ -696,8 +699,11 @@ def deleteBooking(request,fk1):
 def mainMarketplace(request):
     try:
         marketplace=prodProduct.objects.all()
-        allBasket=Basket.objects.all()
-        person = Person.objects.filter(Email=request.session['Email'])
+        # allBasket=Basket.objects.all()
+        
+        person = Person.objects.get(Email=request.session['Email'])
+        
+        allBasket = Basket.objects.filter(Person_fk_id=person.id,is_checkout=0)
         user=Person.objects.all()
         return render(request,'MainMarketplace.html',{'marketplace':marketplace, 'allBasket':allBasket, 'person':person, 'user':user})
     except prodProduct.DoesNotExist:
@@ -866,28 +872,110 @@ def stripe_webhook(request):
 
 #BASKET VIEW
 def basket_summary(request):
-    basket = Basket(request)
-    return render(request, 'summary.html', {'basket': basket})
+    person = Person.objects.get(Email=request.session['Email'])
+    allBasket = Basket.objects.filter(Person_fk_id=person.id)
+    print(allBasket)
+    return render(request, 'summary_view.html', {'allBasket': allBasket})
     
 def summary(request):
     try:
         product=prodProduct.objects.all()
-        allBasket=Basket.objects.all()
-        person=Person.objects.filter(Email=request.session['Email'])
+        person=Person.objects.get(Email=request.session['Email'])
         user=Person.objects.all()
-        totalprice = allBasket.get_total_price(1)
-        subtotal = allBasket.get_subtotal_price(1)
+        allBasket = Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0)
+        
+        total = 0
+        
+        for x in allBasket:
+            total += x.productid.productPrice * x.productqty
         context = {
             'allBasket': allBasket,
             'product': product,
             'person': person,
             'user': user,
-            'totalprice': totalprice,
-            'subtotal': subtotal
+            'total':total
         }
         return render(request,'summary.html', context)
     except prodProduct.DoesNotExist:
         raise Http404('Data does not exist')
+    
+def history(request):
+    try:
+        product=prodProduct.objects.all()
+        person=Person.objects.get(Email=request.session['Email'])
+        user=Person.objects.all()
+        allBasket = Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=1)
+        context = {
+            'allBasket': allBasket,
+            'product': product,
+            'person': person,
+            'user': user,
+        }
+        return render(request,'history.html', context)
+    except prodProduct.DoesNotExist:
+        raise Http404('Data does not exist')
+    
+    
+    
+def pay(request):
+    tcode = 'TRANS#'+str(timezone.now())
+    person=Person.objects.get(Email=request.session['Email'])
+    
+   
+    
+    for bas in Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0) :
+        prod = prodProduct.objects.all().get(productid=bas.productid.productid)
+        prod.productStock -= bas.productqty
+        if prod.productStock < 0 :
+            return HttpResponse('Stock is not enough', content_type='application/json')
+        else :
+            prod.save()
+    ord = Order()
+    ord.name = request.POST['name']
+    ord.email = request.POST['email']
+    ord.address = request.POST['address']
+    ord.payment = request.POST['payment']
+    ord.creditnumber = request.POST['creditnumber']
+    ord.expiration = request.POST['expiration']
+    ord.cvv = request.POST['cvv']
+    ord.transaction_code = tcode
+    ord.user_id = person.id
+    ord.namecard = request.POST['namecard']
+    ord.shipping = request.POST['shipping']
+    ord.total = request.POST['total']
+    
+    ord.save()
+    Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0).update(is_checkout=1,transaction_code=tcode)
+    return redirect('history')
+
+def invoice(request,fk1):
+    ids = Basket.objects.get(id=fk1)
+    basket = Basket.objects.all().filter(transaction_code=ids.transaction_code)
+    history = Order.objects.all().filter(transaction_code=ids.transaction_code)
+    return render(request,'invoice.html',{'basket':basket,'history':history})
+    
+
+def remove_from_cart(request):
+    request.POST['item_id']
+    obj = Basket.objects.get(id=request.POST['item_id'])
+    if obj.productqty > 1:
+        obj.productqty -= 1
+        obj.save()
+    else :
+        obj.delete()
+
+    response = {'status':1,'message':'ok'}
+    return HttpResponse(json.dumps(response),content_type='application/json')
+
+
+def add_from_cart(request):
+    request.POST['item_id']
+    obj = Basket.objects.get(id=request.POST['item_id'])
+    obj.productqty += 1
+    obj.save()
+    response = {'status':1,'message':'ok'}
+    return HttpResponse(json.dumps(response),content_type='application/json')
+
 
 def basket_add(request, fk1,fk2):
     # basket = Basket(request)
@@ -901,30 +989,23 @@ def basket_add(request, fk1,fk2):
     return render(request, 'summary.html', {'basket': basket})
 
 def add_to_basket(request, fk1,fk2):
-    # basket = Basket(request)
+    
     product = prodProduct.objects.get(pk=fk1)
     user = Person.objects.get(pk=fk2)
     if request.method=='POST':
         productqty= request.POST.get('productqty')
-        basket = Basket(productqty=productqty,productid=product,Person_fk=user).save()
-        # basket.save()
+        basket = Basket.objects.filter(productid=product,Person_fk=user,is_checkout=0)
+        if len(basket) == 0 : 
+            basket = Basket(productqty=productqty,productid=product,Person_fk=user,is_checkout=0,transaction_code='').save()
+        else :
+            basket = Basket.objects.get(Person_fk=user,productid=product,is_checkout=0)
+            basket.productqty += 1
+            basket.save()
+        
         messages.success(request,'Item successfully added to your basket')
         return redirect('../../../MainMarketplace.html')
     return render(request, '../../../MainMarketplace.html', {'basket': basket})
 
-# def basket_add(request):
-#     basket = Basket(request)
-#     if request.method=='POST':
-#         product.productid = request.POST.get('productid')
-#         product.productqty= request.POST.get('productqty')
-#         product = get_object_or_404(prodProduct, productid=product.productid)
-#         basket.add(product=product, qty=product.productqty)
-
-#         return redirect('basket_summary')
-#         # basketqty = basket.__len__()
-#         # response = JsonResponse({'qty': basketqty})
-#         # return response
-#     return render(request, 'summary.html', {'basket': basket})
 
 def basket_delete(request):
     basket = Basket(request)

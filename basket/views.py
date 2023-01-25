@@ -2,12 +2,22 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 
 from marketplace.models import prodProduct
-
+from django.core.cache import cache
 from basket.models import Basket
+from .models import Person
 
 def basket_summary(request):
-    basket = Basket(request)
-    return render(request, 'basket/summary.html', {'basket': basket})
+    
+    person = Person.objects.get(Email=request.session['Email'])
+    basket = Basket.objects.filter(Person_fk_id=person.id)
+    print('ada')
+    return render(request, 'SellProduct.html', {'basket': basket})
+
+def basket_summ(request):
+    
+    person = Person.objects.get(Email=request.session['Email'])
+    basket = Basket.objects.filter(Person_fk_id=person.id)
+    return render(request, 'SellProduct.html', {'basket': basket})
 
 
 def basket_add(request):

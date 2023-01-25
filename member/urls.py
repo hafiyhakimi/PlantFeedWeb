@@ -30,6 +30,7 @@ from member.api import UserAuthentication, UserList
 #from LOGIN.views import UserReg, sharing, discussion, view, workshop, booking, member
 from .import views
 from .import api
+from .import models
 # from .import index
 #from member import views
 #from rest_framework import routers
@@ -64,13 +65,14 @@ urlpatterns = [
     path('MyGroup.html',views.myGroup, name="MyGroup"),
     path('CreategroupAdmin.html',views.GroupAdmin, name="GroupAdmin"),
     #path('CreategroupAdmin.html',views.GroupAdmin, name="GroupAdmin"),
-    path('EditGroup.html/<str:fk1>/<str:fk>/',views.updateGroup, name="EditGroup"),
+    path('EditGroup.html/<str:fk1>/<str:fk>/',views.updateAdminGroup, name="EditAdminGroup"),
+    path('EditGroup.html/<str:fk1>/<str:fk>/',views.updateMemberGroup, name="EditMemberGroup"),
     #path('EditGroup.html',views.ViewEditGroup, name="ViewEditGroup"),
     #url(r'^world/(?P<world_pk>\d+)/(?P<country_pk>\d+)/$'
     
     path('AddGroupSharing.html/<str:fk1>/<str:fk3>/', views.GSharing, name="GSharing"),
     path('ViewGroupSharing.html/<str:fk1>/', views.ViewGroupSharing, name="ViewGroupSharing"),
-    path('EditGroupSharing.html/<str:fk1>/',views.updateGroupSharing, name="UpdateGroupSharing"),
+    path('EditGroupSharing.html/<str:fk1>/', views.updateGroupSharing, name="UpdateGroupSharing"),
     path('DeleteGroupSharing.html/<str:fk1>/', views.deleteGroupSharing, name="DeleteGroupSharing"),
     
     path('MainMarketplace.html',views.mainMarketplace, name="MainMarketplace"),

@@ -400,6 +400,7 @@ def GroupAdmin(request):
 def group(request, fk1):
     #person_fk = Person.objects.filter()
     group=Group.objects.all()
+    member=GroupMember.objects.all()
     user = Person.objects.filter(Email=request.session['Email'])
     person = Person.objects.get(pk=fk1)
     if request.method=='POST':
@@ -423,7 +424,7 @@ def myGroup(request):
     except Group.DoesNotExist:
        raise Http404('Data does not exist')
 
-def updateGroup(request, fk1, fk):
+def updateAdminGroup(request, fk1, fk):
     #group = Group.objects.filter(Name=request.session['GName'])
     user = Person.objects.filter(Email=request.session['Email'])
     g = Group.objects.get(pk=fk1)
@@ -433,8 +434,28 @@ def updateGroup(request, fk1, fk):
     if request.method=='POST':
         t = Group.objects.get(pk=fk1)
         f = Person.objects.get(pk=fk)
+        admin = 1
         #GUsername = request.POST.get('Username')
-        GroupMember(Username=f.Username, Group_fk=t, Person_fk=f).save(),
+        GroupMember(Username=f.Username, Group_fk=t, Person_fk=f, Userlevel=admin).save(),
+        messages="Your username is successfully added"
+        return redirect('../../../MainGroup.html', {'group':group, 'person':person, 'gmember':gmember,'user':user, 'g':g})
+
+    else:
+        return render(request, 'EditGroup.html', {'group':group, 'person':person, 'user':user, 'g':g})
+    
+def updateMemberGroup(request, fk1, fk):
+    #group = Group.objects.filter(Name=request.session['GName'])
+    user = Person.objects.filter(Email=request.session['Email'])
+    g = Group.objects.get(pk=fk1)
+    person = Person.objects.filter(Email=request.session['Email'])
+    gmember = GroupMember.objects.all()
+    group = Group.objects.all()
+    if request.method=='POST':
+        t = Group.objects.get(pk=fk1)
+        f = Person.objects.get(pk=fk)
+        member = 0
+        #GUsername = request.POST.get('Username')
+        GroupMember(Username=f.Username, Group_fk=t, Person_fk=f, Userlevel=member).save(),
         messages="Your username is successfully added"
         return redirect('../../../MainGroup.html', {'group':group, 'person':person, 'gmember':gmember,'user':user, 'g':g})
 

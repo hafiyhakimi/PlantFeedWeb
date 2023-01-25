@@ -11,7 +11,7 @@
 <script>
     alert('{{mssg}}');
     window.location.href = "../../../";
-    window.location.href = "{% url 'EditGroup' group.id user.id %}";
+    window.location.href = "{% url 'EditMemberGroup' group.id user.id %}";
 </script>
 {% endif %}
 {% endif %}
@@ -128,7 +128,7 @@
                     
                   
                     {% for user in user %}
-                    <a href="{% url 'EditGroup' group.id user.id %}" class="link-primary">
+                    <a href="{% url 'EditMemberGroup' group.id user.id %}" class="link-primary">
                       <img src="media/join.png" width="40" height="40"></a> 
                       {% endfor %}
                      

@@ -222,7 +222,7 @@
                         <button type="submit" style="float: right; margin-right: 5px">Add to basket</button>
                       </form>
                     
-                      <form id="buy-form" method="post" action="{% url 'basket_add' item.productid person.id %}">
+                      <form id="buy-form" method="post" action="{% url 'buy_now' item.productid person.id %}">
                         {% csrf_token %} 
                         <input type="hidden" name="productqty" value="1">
                         <button type="submit" style="float: right; margin-right: 10px">Buy now</button>

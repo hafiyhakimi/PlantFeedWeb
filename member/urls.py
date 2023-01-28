@@ -52,7 +52,7 @@ urlpatterns = [
     path('DeleteProduct/<str:fk1>/',views.deleteProduct, name="DeleteProduct"),
     path('UpdateProduct.html/<str:fk1>/',views.updateProduct, name="UpdateProduct"),
     
-    path('basket_add/<str:fk1>/<str:fk2>/',views.basket_add, name='basket_add'),
+    path('buy_now/<str:fk1>/<str:fk2>/',views.buy_now, name='buy_now'),
     path('add_to_basket/<str:fk1>/<str:fk2>/',views.add_to_basket, name='add_to_basket'),
     # path('summary/', views.basket_summary, name='basket_summary'),
     
@@ -79,15 +79,15 @@ urlpatterns = [
     path('error/', views.Error.as_view(), name='error'),
     path('webhook/', views.stripe_webhook),
 
-    path('summary_view.html', views.basket_summary, name='basket_summary'),
+    # path('summary_view.html', views.basket_summary, name='basket_summary'),
     path('summary.html', views.summary, name='summary'),
     path('history.html', views.history, name='history'),
     path('invoice.html/<str:fk1>/', views.invoice, name='invoice'),
-    path('remove_from_cart/', views.remove_from_cart, name='remove_from_cart'),
-    path('add_from_cart/', views.add_from_cart, name='add_from_cart'),
-    path('add/', views.basket_add, name='basket_add'),
-    path('delete/', views.basket_delete, name='basket_delete'),
-    path('update/', views.basket_update, name='basket_update'),
+    path('remove_basket_qty/', views.remove_basket_qty, name='remove_basket_qty'),
+    path('add_basket_qty/', views.add_basket_qty, name='add_basket_qty'),
+    # path('add/', views.basket_add, name='basket_add'),
+    path('basket_delete/', views.basket_delete, name='basket_delete'),
+    # path('update/', views.basket_update, name='basket_update'),
     
     url(r'^api/users_lists/$', UserList.as_view(), name='user_list'),
     #url(r'^api/users_list/(?P<id>\d+)/$', UserDetail.as_view(), name='user_list'),

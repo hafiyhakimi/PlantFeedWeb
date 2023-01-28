@@ -108,28 +108,25 @@
                   font-size: 14px;
                   color: #4a4a4a;
                 ">
-                <h3>IGROW</h3>
+                <h3>IGROW Invoice</h3>
                 <p style="margin: 15px auto;">
-                  A2, Test Street <br>
-                  Test Area Bangaluru 560001, Karnataka
+                  {{ order.address }}
                 </p>
                 <p>
-                  <b>GSTIN:</b> 0987653456789
-                </p>
-                <p>
-                  <b>CIN:</b> 0987653456789
-                </p>
-                <p>
+                  <b>Transaction ID</b> <br>{{ order.transaction_code }}
+                </p>         
+                <!-- <p>
                   <b>FSSAI No. :</b> 0987653456789
-                </p>
+                </p> -->
                 <hr style="border: 1px dashed rgb(131, 131, 131); margin: 25px auto">
               </div>
               <table style="width: 100%; table-layout: fixed">
                 <thead>
                   <tr>
-                    <th style="width: 50px; padding-left: 0;">Sn.</th>
+                    <th style="width: 50px; padding-left: 0;">No.</th>
                     <th style="width: 220px;">Item Name</th>
-                    <th>QTY</th>
+                    <th>Qty</th>
+                    <th>Price</th>
                   
                   </tr>
                 </thead>
@@ -140,8 +137,8 @@
                   <tr class="invoice-items">
                     <td>{{forloop.counter}}</td>
                     <td >{{ bas.productid.productName }}</td>
-                    <td>{{ bas.productid.productQty }}</td>
-                   
+                    <td>{{ bas.productqty }}</td>
+                    <td>RM{{ bas.productid.productPrice }}</td>
                   </tr>
                     {% endfor %}
                         
@@ -149,7 +146,7 @@
                 </tbody>
               </table>
 
-              {% comment %} <table style="width: 100%;
+              <!-- <table style="width: 100%;
               background: #fcbd024f;
               border-radius: 4px;">
                 <thead>
@@ -162,7 +159,7 @@
                   </tr>
                 </thead>
              
-              </table>
+              </table> -->
 
               <table style="width: 100%;
               margin-top: 15px;
@@ -170,16 +167,16 @@
               border-radius: 3px;">
                 <thead>
                   <tr>
-                    <td>Total Saving In Rs: </td>
-                    <td style="text-align: right;">₹ 396</td>
+                    <td>Shipping: </td>
+                    <td style="text-align: right;">RM{{ order.shipping }}</td>
                   </tr>
                   <tr>
-                    <td>Total Saving In %: </td>
-                    <td style="text-align: right;">32%</td>
+                    <td>Total Price: </td>
+                    <td style="text-align: right;">RM{{ order.total }}</td>
                   </tr>
                 </thead>
              
-              </table> {% endcomment %}
+              </table>
 
     </section>
   </body>

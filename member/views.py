@@ -802,18 +802,6 @@ def updateProduct(request,fk1):
         return render(request,'ViewMarketplace.html',{'MarketplaceFeed':MarketplaceFeed, 'person':person})  
 
 
-# def payment(request):
-#         try:
-#             data=Payment.objects.all()
-#             return render(request,'Payment.html',{'data':data})
-#         except Payment.DoesNotExist:
-#             raise Http404('Data does not exist')
-
-#             stripe.api_key = 'pk_test_51M4MnSIMiEP0GJmrTjOFwVfxpZ5KRfUJfHYNTfiEHQ1TlwaQBJxclgibBE0VBYeRRJs85bnPAH0bAzytGUdeqB6i00TbB5FJ8Y'
-#             intent = stripe.PaymentIntent.create(
-#                 amount=total,
-#         )
-
 #PAYMENT VIEW
 def order_placed(request):
     basket = Basket(request)
@@ -859,23 +847,14 @@ def stripe_webhook(request):
     except ValueError as e:
         print(e)
         return HttpResponse(status=400)
-            
-# def process_payment(request, product_id, quantity):
-#     # Retrieve the product from the database
-#     product = prodProduct.objects.get(pk=product_id)
-#     # Calculate the updated product stock
-#     updated_stock = product.productStock - quantity
-#     # Save the updated stock back to the database
-#     product.productStock = updated_stock
-#     product.save()
-#     # Process the payment (omitted for brevity)
+
 
 #BASKET VIEW
-def basket_summary(request):
-    person = Person.objects.get(Email=request.session['Email'])
-    allBasket = Basket.objects.filter(Person_fk_id=person.id)
-    print(allBasket)
-    return render(request, 'summary_view.html', {'allBasket': allBasket})
+# def basket_summary(request):
+#     person = Person.objects.get(Email=request.session['Email'])
+#     allBasket = Basket.objects.filter(Person_fk_id=person.id)
+#     print(allBasket)
+#     return render(request, 'summary.html', {'allBasket': allBasket})
     
 def summary(request):
     try:
@@ -898,7 +877,8 @@ def summary(request):
         return render(request,'summary.html', context)
     except prodProduct.DoesNotExist:
         raise Http404('Data does not exist')
-    
+
+#HISTORY VIEW
 def history(request):
     try:
         product=prodProduct.objects.all()
@@ -914,14 +894,17 @@ def history(request):
         return render(request,'history.html', context)
     except prodProduct.DoesNotExist:
         raise Http404('Data does not exist')
-    
-    
-    
+
+def invoice(request,fk1):
+    ids = Basket.objects.get(id=fk1)
+    basket = Basket.objects.all().filter(transaction_code=ids.transaction_code)
+    order = Order.objects.get(transaction_code=ids.transaction_code)
+    return render(request,'invoice.html',{'basket':basket,'order':order})   
+
+#PAYMENT VIEW
 def pay(request):
     tcode = 'TRANS#'+str(timezone.now())
     person=Person.objects.get(Email=request.session['Email'])
-    
-   
     
     for bas in Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0) :
         prod = prodProduct.objects.all().get(productid=bas.productid.productid)
@@ -948,14 +931,8 @@ def pay(request):
     Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0).update(is_checkout=1,transaction_code=tcode)
     return redirect('history')
 
-def invoice(request,fk1):
-    ids = Basket.objects.get(id=fk1)
-    basket = Basket.objects.all().filter(transaction_code=ids.transaction_code)
-    history = Order.objects.all().filter(transaction_code=ids.transaction_code)
-    return render(request,'invoice.html',{'basket':basket,'history':history})
-    
-
-def remove_from_cart(request):
+#BASKET VIEW
+def remove_basket_qty(request):
     request.POST['item_id']
     obj = Basket.objects.get(id=request.POST['item_id'])
     if obj.productqty > 1:
@@ -967,8 +944,7 @@ def remove_from_cart(request):
     response = {'status':1,'message':'ok'}
     return HttpResponse(json.dumps(response),content_type='application/json')
 
-
-def add_from_cart(request):
+def add_basket_qty(request):
     request.POST['item_id']
     obj = Basket.objects.get(id=request.POST['item_id'])
     obj.productqty += 1
@@ -976,16 +952,20 @@ def add_from_cart(request):
     response = {'status':1,'message':'ok'}
     return HttpResponse(json.dumps(response),content_type='application/json')
 
-
-def basket_add(request, fk1,fk2):
+def buy_now(request, fk1,fk2):
     # basket = Basket(request)
     product = prodProduct.objects.get(pk=fk1)
     user = Person.objects.get(pk=fk2)
     if request.method=='POST':
         productqty= request.POST.get('productqty')
-        basket = Basket(productqty=productqty,productid=product,Person_fk=user).save()
-        # basket.save()
-        return redirect('basket_summary')
+        basket = Basket.objects.filter(productid=product,Person_fk=user,is_checkout=0)
+        if len(basket) == 0 : 
+            basket = Basket(productqty=productqty,productid=product,Person_fk=user,is_checkout=0,transaction_code='').save()
+        else :
+            basket = Basket.objects.get(Person_fk=user,productid=product,is_checkout=0)
+            basket.productqty += 1
+            basket.save()
+        return redirect('summary')
     return render(request, 'summary.html', {'basket': basket})
 
 def add_to_basket(request, fk1,fk2):
@@ -1008,24 +988,19 @@ def add_to_basket(request, fk1,fk2):
 
 
 def basket_delete(request):
-    basket = Basket(request)
-    if request.POST.get('action') == 'post':
-        product_id = int(request.POST.get('productid'))
-        basket.delete(product=product_id)
+    request.POST['item_id']
+    obj = Basket.objects.get(id=request.POST['item_id'])
+    obj.delete()
+    response = {'status':1,'message':'ok'}
+    return HttpResponse(json.dumps(response),content_type='application/json')
+# def basket_update(request):
+#     basket = Basket(request)
+#     if request.POST.get('action') == 'post':
+#         product_id = int(request.POST.get('productid'))
+#         product_qty = int(request.POST.get('productqty'))
+#         basket.update(product=product_id, qty=product_qty)
 
-        basketqty = basket.__len__()
-        baskettotal = basket.get_total_price()
-        response = JsonResponse({'qty': basketqty, 'subtotal': baskettotal})
-        return response
-
-def basket_update(request):
-    basket = Basket(request)
-    if request.POST.get('action') == 'post':
-        product_id = int(request.POST.get('productid'))
-        product_qty = int(request.POST.get('productqty'))
-        basket.update(product=product_id, qty=product_qty)
-
-        basketqty = basket.__len__()
-        basketsubtotal = basket.get_subtotal_price()
-        response = JsonResponse({'qty': basketqty, 'subtotal': basketsubtotal})
-        return response
+#         basketqty = basket.__len__()
+#         basketsubtotal = basket.get_subtotal_price()
+#         response = JsonResponse({'qty': basketqty, 'subtotal': basketsubtotal})
+#         return response

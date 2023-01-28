@@ -20,16 +20,16 @@ class Basket(models.Model):
     def save(self):
         super().save()
     
-    def get_subtotal_price(self, fk1):
-        basket_items = Basket.objects.select_related('product').filter(product__pk=fk1)
-        subtotal = sum(Decimal(item.product.productPrice) * item.productqty for item in basket_items)
-        return subtotal
+    # def get_subtotal_price(self, fk1):
+    #     basket_items = Basket.objects.select_related('product').filter(product__pk=fk1)
+    #     subtotal = sum(Decimal(item.product.productPrice) * item.productqty for item in basket_items)
+    #     return subtotal
 
-    def get_total_price(self, fk1):
-        subtotal = self.get_subtotal_price(fk1)
-        SHIPPING_CHARGE = Decimal(3.00)
-        total = subtotal + SHIPPING_CHARGE
-        return total
+    # def get_total_price(self, fk1):
+    #     subtotal = self.get_subtotal_price(fk1)
+    #     SHIPPING_CHARGE = Decimal(3.00)
+    #     total = subtotal + SHIPPING_CHARGE
+    #     return total
     # def deleteProduct(self):
     #     super().delete()
 

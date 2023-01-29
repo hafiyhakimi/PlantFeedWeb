@@ -114,7 +114,7 @@ DATABASES = {
     # },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'farming2',
+        'NAME': 'igrow',
         'USER':'root',
         'PASSWORD':'',
         'HOST':'localhost',

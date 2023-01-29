@@ -91,6 +91,7 @@
           class="btn btn-outline-secondary border-0 basket-btn">
 
           <div id="basket-qty" class="basket-qty">
+            
             {% if allBasket.count > 0 %}
               {{ allBasket.count }}
             {% else %}
@@ -121,14 +122,14 @@
             <body>  
               {% csrf_token %}
               
-              {% for person in person %}
+             
                 <div class="container my-3 bg-light">
                   <label for="exampleFormControlTextarea1" style="font-size: 2em;" >Marketplace</label>
                     <div class="m">
                       <a href="{% url 'SellProduct' person.id %}" class="link-primary"><img src="images/add.png" width="30" height="30">Sell Product</a> 
                     </div>
                 </div>                            
-              {% endfor %}     
+            
 {% endblock content %}
 
 {% block body %}
@@ -209,25 +210,24 @@
                       </table>
                     
                     <div class="card-body p-4">
-                      <b>RM{{item.productPrice}}</b>
+                      <b>RM {{item.productPrice}}</b>
                       <b style="float: right">{{item.productStock}} stock left</b><br><br>
                       <p class="mb-0" value="{{ item.productDesc }}" style="text-align: justify;">{{ item.productDesc }}</p>
                       <br>
                       {% if item.Person_fk.Email != request.session.Email %}
-                      {% for person in person %}
+                      
                       <form id="buy-form" method="post" action="{% url 'add_to_basket' item.productid person.id %}">
                         {% csrf_token %} 
                         <input type="hidden" name="productqty" value="1">
                         <button type="submit" style="float: right; margin-right: 5px">Add to basket</button>
                       </form>
-                      {% endfor %}
-                      {% for person in person %}
-                      <form id="buy-form" method="post" action="{% url 'basket_add' item.productid person.id %}">
+                    
+                      <form id="buy-form" method="post" action="{% url 'buy_now' item.productid person.id %}">
                         {% csrf_token %} 
                         <input type="hidden" name="productqty" value="1">
                         <button type="submit" style="float: right; margin-right: 10px">Buy now</button>
                       </form>
-                      {% endfor %}
+                    
                       <br><br>
                       {% endif %}
                       {% if item.Person_fk.Email == request.session.Email %}

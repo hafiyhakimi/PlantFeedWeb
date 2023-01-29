@@ -5,13 +5,14 @@
           margin: auto;
           overflow-x: hidden;
           width: 200px;
-                }
-        table{
+        }
+
+        table {
           border:4px solid black;
           margin: 0 auto;
           padding: 40px;
           width: fit-content;
-            }
+        }
 
         img {
           max-width: 100%;
@@ -32,7 +33,7 @@
 
         .account-form input
         {
-              border: 2px solid #ccc; height: calc(2em + .75rem + 2px);
+          border: 2px solid #ccc; height: calc(2em + .75rem + 2px);
         }
 
         .form-control {
@@ -44,6 +45,20 @@
           box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075), 0 0 0px rgba(255, 0, 0, 0.6);
         }
         
+        .img-container {
+          position: relative;
+          overflow:hidden;
+          height: 300px;
+        }
+
+        .img-container img {
+          position: absolute;
+          top:0;
+          left:0;
+          width: 100%;
+          height:100%;
+          object-fit: cover
+        }
       </style>
 
 </head>
@@ -74,16 +89,48 @@
         <a class="nav-link active" id="discussion-tab" data-bs-toggle="tab" href="{% url 'MainGroup' %}" role="tab" aria-controls="discussion" aria-selected="true">Group</a>
       </li>
       <li class="nav-item" role="presentation">
-       <a class="nav-link active" id="friends-tab" data-bs-toggle="tab" href="{% url 'MainMember' %}" role="tab" aria-controls="friends" aria-selected="true">Member</a>
+        <a class="nav-link active" id="friends-tab" data-bs-toggle="tab" href="{% url 'MainMember' %}" role="tab" aria-controls="friends" aria-selected="true">Member</a>
       </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link active" id="workshop-tab" data-bs-toggle="tab" href="{% url 'BookWorkshop' %}"role="tab" aria-controls="workshop" aria-selected="true">Workshop</a>
-       </li>
-       <li class="nav-item" role="presentation">
+      </li>
+      <li class="nav-item" role="presentation">
         <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="{% url 'View' %}" role="tab" aria-controls="profile" aria-selected="true">Profile</a>
-       </li>
-       <li class="nav-item" role="presentation">
+      </li>
+      <li class="nav-item" role="presentation">
         <a class="nav-link active" id="marketplace-tab" data-bs-toggle="tab" href="{% url 'MainMarketplace' %}" role="tab" aria-controls="marketplace" aria-selected="true">Marketplace</a>
+      </li>
+      <li>
+        <a type="button" role="button" href="{% url 'summary' %}"
+            class="btn btn-outline-secondary border-0 basket-btn">
+  
+            <div id="basket-qty" class="basket-qty">
+              
+              {% if allBasket.count > 0 %}
+                {{ allBasket.count }}
+              {% else %}
+              0
+              {% endif %}
+            </div>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-cart3"
+                viewBox="0 0 16 16">
+                <path
+                  d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+              </svg>
+            </div>
+            <span class="fs15 fw500">Basket</span>
+          </a>
+      </li>
+      <li>
+        <a type="button" role="button" href="{% url 'history' %}" padding="20"
+            class="btn btn-outline-secondary border-0 basket-btn">
+            <br>
+            <div>
+              <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" viewBox="0, 0, 400, 400"><g id="svgg"><path id="path0" d="M46.292 13.641 C 38.544 16.061,31.466 22.395,27.513 30.445 L 25.391 34.766 25.391 200.000 L 25.391 365.234 27.689 369.922 C 30.622 375.904,36.596 381.878,42.578 384.811 L 47.266 387.109 174.609 387.109 L 301.953 387.109 308.685 385.391 C 384.768 365.969,399.386 264.131,331.836 224.107 L 325.000 220.057 325.000 155.154 L 325.000 90.252 286.124 51.376 L 247.248 12.500 148.429 12.552 C 68.635 12.594,48.971 12.804,46.292 13.641 M237.657 51.367 L 237.891 77.734 240.189 82.422 C 243.124 88.408,249.100 94.386,255.078 97.314 L 259.766 99.609 286.133 99.843 L 312.500 100.077 312.500 157.904 C 312.500 213.785,312.451 215.715,311.057 215.272 C 296.192 210.554,271.460 211.793,255.629 218.047 C 189.318 244.247,179.909 332.699,239.081 373.603 C 242.447 375.929,54.240 375.309,49.219 372.977 C 44.968 371.003,40.418 366.141,38.961 362.016 C 37.364 357.494,37.364 42.506,38.961 37.984 C 41.078 31.991,46.871 27.103,53.380 25.816 C 55.173 25.461,97.317 25.133,147.032 25.086 L 237.423 25.000 237.657 51.367 M299.819 87.375 C 291.912 88.196,265.115 86.981,262.109 85.665 C 252.090 81.276,250.483 76.953,250.158 53.516 L 249.898 34.766 276.135 60.938 C 301.837 86.575,302.321 87.115,299.819 87.375 M64.063 89.063 C 63.021 90.104,62.500 91.667,62.500 93.750 C 62.500 100.337,60.139 100.000,106.250 100.000 C 152.361 100.000,150.000 100.337,150.000 93.750 C 150.000 87.163,152.361 87.500,106.250 87.500 C 66.667 87.500,65.585 87.540,64.063 89.063 M64.063 126.563 C 63.021 127.604,62.500 129.167,62.500 131.250 C 62.500 137.488,62.550 137.500,87.500 137.500 C 112.450 137.500,112.500 137.488,112.500 131.250 C 112.500 125.012,112.450 125.000,87.500 125.000 C 66.667 125.000,65.551 125.074,64.063 126.563 M126.563 126.563 C 125.521 127.604,125.000 129.167,125.000 131.250 C 125.000 138.063,117.685 137.500,206.250 137.500 C 294.815 137.500,287.500 138.063,287.500 131.250 C 287.500 124.437,294.815 125.000,206.250 125.000 C 129.167 125.000,128.104 125.021,126.563 126.563 M64.063 164.063 C 63.021 165.104,62.500 166.667,62.500 168.750 C 62.500 175.514,56.844 175.000,131.250 175.000 C 205.656 175.000,200.000 175.514,200.000 168.750 C 200.000 161.986,205.656 162.500,131.250 162.500 C 66.667 162.500,65.600 162.525,64.063 164.063 M214.063 164.063 C 213.021 165.104,212.500 166.667,212.500 168.750 C 212.500 175.258,210.953 175.000,250.000 175.000 C 289.047 175.000,287.500 175.258,287.500 168.750 C 287.500 162.242,289.047 162.500,250.000 162.500 C 216.667 162.500,215.578 162.547,214.063 164.063 M64.063 201.563 C 63.021 202.604,62.500 204.167,62.500 206.250 C 62.500 212.837,60.139 212.500,106.250 212.500 C 152.361 212.500,150.000 212.837,150.000 206.250 C 150.000 199.663,152.361 200.000,106.250 200.000 C 66.667 200.000,65.585 200.040,64.063 201.563 M164.063 201.563 C 163.021 202.604,162.500 204.167,162.500 206.250 C 162.500 212.648,161.758 212.500,193.750 212.500 C 225.742 212.500,225.000 212.648,225.000 206.250 C 225.000 199.852,225.742 200.000,193.750 200.000 C 166.667 200.000,165.567 200.058,164.063 201.563 M300.347 226.676 C 348.918 234.413,376.681 290.542,353.518 334.174 C 329.191 380.000,268.790 388.390,233.387 350.862 C 184.454 298.990,229.528 215.395,300.347 226.676 M64.063 239.063 C 63.021 240.104,62.500 241.667,62.500 243.750 C 62.500 250.483,57.672 250.000,125.000 250.000 C 192.328 250.000,187.500 250.483,187.500 243.750 C 187.500 237.017,192.328 237.500,125.000 237.500 C 66.667 237.500,65.598 237.527,64.063 239.063 M251.563 257.813 C 247.503 261.872,248.550 263.850,265.710 284.558 C 274.351 294.985,282.124 304.131,282.984 304.883 C 284.404 306.124,286.851 306.250,309.462 306.250 C 337.833 306.250,337.500 306.324,337.500 300.000 C 337.500 293.772,337.424 293.752,312.695 293.733 L 291.016 293.716 277.344 277.214 C 259.065 255.150,260.167 256.250,256.327 256.250 C 254.167 256.250,252.617 256.758,251.563 257.813 M64.063 276.563 C 63.021 277.604,62.500 279.167,62.500 281.250 C 62.500 287.488,62.550 287.500,87.500 287.500 C 112.450 287.500,112.500 287.488,112.500 281.250 C 112.500 275.012,112.450 275.000,87.500 275.000 C 66.667 275.000,65.551 275.074,64.063 276.563 M126.563 276.563 C 125.521 277.604,125.000 279.167,125.000 281.250 C 125.000 287.488,125.050 287.500,150.000 287.500 C 174.950 287.500,175.000 287.488,175.000 281.250 C 175.000 275.012,174.950 275.000,150.000 275.000 C 129.167 275.000,128.051 275.074,126.563 276.563 M64.063 314.063 C 63.021 315.104,62.500 316.667,62.500 318.750 C 62.500 325.148,61.758 325.000,93.750 325.000 C 125.742 325.000,125.000 325.148,125.000 318.750 C 125.000 312.352,125.742 312.500,93.750 312.500 C 66.667 312.500,65.567 312.558,64.063 314.063 M139.063 314.063 C 138.021 315.104,137.500 316.667,137.500 318.750 C 137.500 324.728,138.316 325.000,156.250 325.000 C 174.184 325.000,175.000 324.728,175.000 318.750 C 175.000 312.772,174.184 312.500,156.250 312.500 C 141.667 312.500,140.521 312.604,139.063 314.063 " stroke="none" fill="#000000" fill-rule="evenodd"></path></g></svg>
+            </div>
+            <span class="fs15 fw500">History</span>
+          </a>
       </li>
     </ul>
   </div>
@@ -102,171 +149,248 @@
 <div class="container">
   <div class="row g-3">
     {% if allBasket.count == 0 %}
-    <div class="col-12">Your basket is empty <a href="{% url 'MainMarketplace' %}">Shop</a></div>
+    <div class="col-12">Your basket is empty. <a href="{% url 'MainMarketplace' %}">Shop Now!</a></div>
     {% else %}
-    <div class="col-12 bg-light p-3 d-flex justify-content-between">
-      <div class="dropdown">
-        <button class="btn btn-success fw-bold" type="button" id="dropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Shipping options
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-          </svg>
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownLink">
-          <a class="dropdown-item" href="#">Next day delivery</a>
-          <a class="dropdown-item" href="#">Premium delivery</a>
-        </div>
-      </div>
-      <!-- {% comment %} <div class="d-flex d-flex-inline">
-        <div class="pe-3">Order<br></div>
-        <div class="dropdown">
-          <a class="text-reset text-decoration-none dropdown-toggle" role="link" id="dropdownLink"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Shipping options
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownLink">
-            <li class="item small">Next day delivery</li>
-            <li class="item small">Premimum delivery</li>
-          </ul>
-        </div>
-      </div> {% endcomment %} -->
-      <div class="text-end">
-        <div class="">Sub Total: <span class="fw-bold">RM</span>
-          <div id="subtotal" class="d-inline-flex fw-bold">{{ basket.get_subtotal_price }}</div>
-        </div>
-        <div id="">Shipping <span class="small">(Next day delivery)</span>: <span class="fw-bold">RM5.00</span></div>
-        <div class="pt-2">Total to pay: <span class="fw-bold">RM</span><span id="total"
-            class="fw-bold h5">{{ basket.get_total_price }}</span></div>
-        </div>
-      </div>
-    <div class="col-md-5 col-lg-4 order-md-last p-0 order-3">
-        <div class="d-grid gap-2 ">
-          <a role="button" href="{% url 'basket' %}" class="btn btn-success fw-bold" type="button">Checkout</a>
-        </div>
-    </div>
-    <div class="col-md-7 col-lg-8 p-0">
-      {% for all_basket in all_basket %}
-        {% for item in product %}
-          {% if all_basket.productid_id == item.productid and all_basket.Person_fk_id.Email == request.session.Email %}
-            <div class="card mb-3 border-0 product-item">
-              <div class="row g-0">
-                <div class="col-md-2 d-none d-md-block">
-                  <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ item.productPhoto }}" />
-                </div>
-                <div class="col-md-10 ps-md-3">
-                  <div class="card-body p-1">
-                    <p class="card-text pb-3">{{ item.productName }}</p>
-                    <label for="select">Qty</label>
-                    <select id="productqty" style="width:50px;height:31px;">
-                      <option value="" selected disabled hidden>1</option>
-                      <option value="">1</option>
-                      <option value="">2</option>
-                      <option value="">3</option>
-                      <option value="">4</option>
-                    </select>
-                    <a type="button" id="update-button" data-index="{{item.productid}}"
-                      class="update-button text-decoration-none small ps-3">Update</a>
-                    <a type="button" id="delete-button" data-index="{{item.productid}}"
-                      class="delete-button text-decoration-none small">Delete</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
-      {% comment %} {% for product_id, product in basket.items %}
-      {% for item in basket %}
-      {% with product=item.product %}
-      <div class="card mb-3 border-0 product-item" data-index="{{product.id}}">
+      {% for bas in allBasket %}
+      <div class="card mb-3 border-0 product-item">
         <div class="row g-0">
           <div class="col-md-2 d-none d-md-block">
-            <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ product.image.url }}" />
+            <img class="img-fluid mx-auto d-block" alt="Responsive image" src="{{ bas.productid.productPhoto }}" />
           </div>
           <div class="col-md-10 ps-md-3">
             <div class="card-body p-1">
-              <a class="text-decoration-none text-reset" href="{{item.product.get_absolute_url}}">
-                <p class="card-text pb-3">{{product.title}}</p>
-              </a>
+              <p class="card-text pb-3">{{ bas.productid.productName }}</p>
+              <p class="card-text pb-3">RM {{ bas.productid.productPrice }}</p>
               <label for="select">Qty</label>
-              <select id="select{{product.id}}" style="width:50px;height:31px;">
-                <option value="" selected disabled hidden>{{item.qty}}</option>
-                <option value="">1</option>
-                <option value="">2</option>
-                <option value="">3</option>
-                <option value="">4</option>
-              </select>
-              <a type="button" id="update-button" data-index="{{product.id}}"
-                class="update-button text-decoration-none small ps-3">Update</a>
-              <a type="button" id="delete-button" data-index="{{product.id}}"
-                class="delete-button text-decoration-none small">Delete</a>
+              <div class="mb-3">
+                <div class="d-flex gap-2">
+                <button class="btn" data-id="{{ bas.id }}" onclick="removeQTY(this)">
+                  -
+                  </button>
+                  <input type="text"
+                    class="form-control" value="{{ bas.productqty }}">
+                    <button class="btn" data-id="{{ bas.id }}" onclick="addQTY(this)">
+                      +
+                      </button>
+              </div>
+                <br>
+                <button class="btn" data-id="{{ bas.id }}" onclick="deletePROD(this)">
+                  Delete
+                  </button>
             </div>
           </div>
         </div>
       </div>
-      {% endwith %}
+
+    
+  
       {% endfor %}
-      {% endfor %} {% endcomment %}
+
+
+
+    <br>
+
+    Subtotal : RM{{ total }}
+    <br>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Checkout
+      </button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Checkout</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form class="needs-validation" action="{% url 'pay' %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+              
+              <div class="col-md-12 mb-3">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="" value="" required="">
+                
+              </div>
+            </div>
+
+          
+            <div class="mb-3">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" required="">
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+           
+            <h4 class="mb-3">Payment</h4>
+
+            <div class="d-block my-3">
+              <div class="custom-control custom-radio">
+                <input id="credit" name="payment" type="radio" class="custom-control-input" checked="" required="">
+                <label class="custom-control-label" for="credit">Credit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="debit" name="payment" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="debit">Debit card</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input id="paypal" name="payment" type="radio" class="custom-control-input" required="">
+                <label class="custom-control-label" for="paypal">Paypal</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="cc-name">Name on card</label>
+                <input type="text" class="form-control" id="cc-name" name="namecard" placeholder="" required="">
+                <small class="text-muted">Full name as displayed on card</small>
+                <div class="invalid-feedback">
+                  Name on card is required
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="cc-number">Credit card number</label>
+                <input type="text" class="form-control" id="cc-number" name="creditnumber" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Credit card number is required
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="cc-expiration">Expiration</label>
+                <input type="text" class="form-control" id="cc-expiration" name="expiration" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Expiration date required
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="cc-expiration">CVV</label>
+                <input type="text" class="form-control" id="cc-cvv" name="cvv" placeholder="" required="">
+                <div class="invalid-feedback">
+                  Security code required
+                </div>
+              </div>
+            </div>
+         
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Shipping</label>
+              <select class="form-control" name="shipping" id="shipping">
+                <option selected>Select Shipping</option>
+              
+                <option value="5" data-price="5">Next Day</option>
+                <option value="3" data-price="3">Premium</option>
+              </select>
+            </div>
+          
+            <br>
+            <p id="subtotal" data-price="{{ total }}">Subtotal : RM{{ total }}</p>
+            <p >Shipping Price : RM<span id="shippingprice">-</span></p>
+            <p >Total : RM<span id="total">-</span></p>
+            <input name="total" type="hidden" id="totalall">
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+          </form>
+      
+
+
+
+      </div>
+      
     </div>
   </div>
 </div>
 
-{% comment %} <script>
-  // Delete Item
-  $(document).on("click", ".delete-button", function (e) {
-    e.preventDefault();
-    var prodid = $(this).data("index");
-    $.ajax({
-      type: "POST",
-      url: '{% url "basket:basket_delete" %}',
-      data: {
-        productid: $(this).data("index"),
-        csrfmiddlewaretoken: "{{csrf_token}}",
-        action: "post",
-      },
-      success: function (json) {
-        $('.product-item[data-index="' + prodid + '"]').remove();
+<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
 
-        if (json.qty == 0) {
-          total = 0
-          subtotal = 0
-        } else {
-          total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-          subtotal = json.subtotal
-        }
+<script>
 
-        document.getElementById("subtotal").innerHTML = subtotal;
-        document.getElementById("basket-qty").innerHTML = json.qty;
-        document.getElementById("total").innerHTML = total;
-      },
-      error: function (xhr, errmsg, err) {},
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
+function removeQTY(e) {
+  
+  const csrftoken = getCookie('csrftoken');
+
+    $.ajax({ 
+      url: '/remove_basket_qty/',
+      type: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {"item_id": e.getAttribute('data-id'),},
+      success: function () {
+        location.reload();
+      }
     });
-  });
+  };
 
-  // Update Item
-  $(document).on("click", ".update-button", function (e) {
-    e.preventDefault();
-    var prodid = $(this).data("index");
-    $.ajax({
-      type: "POST",
-      url: '{% url "basket:basket_update" %}',
-      data: {
-        productid: $(this).data("index"),
-        productqty: $("#select" + prodid + " option:selected").text(),
-        csrfmiddlewaretoken: "{{csrf_token}}",
-        action: "post",
-      },
-      success: function (json) {
+  function deletePROD(e) {
+  
+  const csrftoken = getCookie('csrftoken');
 
-        total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-        document.getElementById("basket-qty").innerHTML = json.qty;
-        document.getElementById("subtotal").innerHTML = json.subtotal;
-        document.getElementById("total").innerHTML = total;
-      },
-      error: function (xhr, errmsg, err) {},
+    $.ajax({ 
+      url: '/basket_delete/',
+      type: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {"item_id": e.getAttribute('data-id'),},
+      success: function () {
+        location.reload();
+      }
     });
-  });
-</script> {% endcomment %}
+  };
 
-{% endif %}
+function addQTY(e) {
+  const csrftoken = getCookie('csrftoken');
+
+    $.ajax({ 
+      url: '/add_basket_qty/',
+      type: 'POST',
+      headers: {'X-CSRFToken': csrftoken},
+      data: {"item_id": e.getAttribute('data-id'),},
+      success: function () {
+        location.reload();
+      }
+    });
+}
+
+$('#shipping').on('change', function() {
+    $('#shippingprice').html(parseFloat(this.value))
+    $('#total').html(parseFloat(this.value) + parseFloat($('#subtotal').data('price')))
+
+    $('#totalall').val(parseFloat(this.value) + parseFloat($('#subtotal').data('price')))
+});
+</script>
 {% endblock %}

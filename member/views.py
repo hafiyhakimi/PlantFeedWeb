@@ -200,10 +200,13 @@ def UserReg(request):
         MaritalStatus=request.POST.get('maritalstatus')
         UserLevel = request.POST.get('userlevel')
         Photo = request.POST.get('Photo')
+        approvedTopic = ApprovedTopic.objects.values('TopicName').distinct()
+        
         #resume = request.POST.get('resume')
         Person(Email=Email,Password=Password,Username=Username,Name=Name,DateOfBirth=DateOfBirth,Age=Age,District=District,State=State,
             Occupation=Occupation,About=About,Gender=Gender,MaritalStatus=MaritalStatus,UserLevel=UserLevel,Photo=Photo).save(),
-
+        
+        
         #try: 
         #    user=authe.create_user_with_email_and_password(email,password)
         #except:
@@ -226,7 +229,14 @@ def UserReg(request):
         # FarmingPerson(Email=Email,Password=Pwd,Username=Username,Name=Name,DateOfBirth=DateOfBirth,Age=Age,District=District,State=State,
             # Occupation=Occupation,About=About,Gender=Gen,MaritalStatus=MaritalStatus),
         #messages.success(request,'The new user ' + request.POST['Email'] + " is save succesfully..!")
-        return render(request,'registration.html')
+        person = Person.objects.filter(Email=Email)
+        
+        request.session['Email'] = Email
+        
+        if UserLevel == "admin":
+            return render(request,'login.html')
+        return render(request,'Topic.html',{'person' : person, 'approvedTopic': approvedTopic})
+
     else :
         return render(request,'registration.html')
 
@@ -286,12 +296,12 @@ def view(request):
 
 
 def selectTopic(request):
+    person = Person.objects.filter(Email=request.session['Email']).first()
     if request.method == 'POST':
-        person = Person.objects.get(Email=request.session['Email'])
         Topiclist = request.POST.getlist('topic')
         for topic in Topiclist:
             Topic.objects.create(TopicName=topic, Person_fk=person)
-        return render(request, 'homepage.html')
+        return render(request, 'login.html')
     else:
         return render(request, 'Topic.html', {'person': person})
 
@@ -303,8 +313,8 @@ def viewSelectedTopic(request):
     return render(request, 'viewTopic.html', {'person': person, 'topics': topics, 'topic_list': topic_list})
 
 def updateSelectedTopic(request):
+    person = Person.objects.filter(Email=request.session['Email'])
     if request.method == 'POST':
-        person = Person.objects.filter(Email=request.session['Email'])
         personlist = Person.objects.filter(Email=request.session['Email'])[0]
         Topic.objects.filter(Person_fk=personlist).delete()
         Topiclist = request.POST.getlist('topic')

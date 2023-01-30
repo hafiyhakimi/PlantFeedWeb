@@ -71,13 +71,13 @@ urlpatterns = [
     path('deleteWorkshop.html/<str:fk1>/',views.deleteWorkshop, name="deleteWorkshop"),
     path('deleteBooking.html/<str:fk1>/',views.deleteBooking, name="deleteBooking"),
     
-    path('Payment.html', views.BasketView, name='basket'),
+    # path('Payment.html', views.BasketView, name='basket'),
     
     path('pay', views.pay, name='pay'),
     
-    path('orderplaced/', views.order_placed, name='order_placed'),
-    path('error/', views.Error.as_view(), name='error'),
-    path('webhook/', views.stripe_webhook),
+    # path('orderplaced/', views.order_placed, name='order_placed'),
+    # path('error/', views.Error.as_view(), name='error'),
+    # path('webhook/', views.stripe_webhook),
 
     # path('summary_view.html', views.basket_summary, name='basket_summary'),
     path('summary.html', views.summary, name='summary'),

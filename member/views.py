@@ -803,50 +803,50 @@ def updateProduct(request,fk1):
 
 
 #PAYMENT VIEW
-def order_placed(request):
-    basket = Basket(request)
-    basket.clear()
-    return render(request, 'payment/orderplaced.html')
+# def order_placed(request):
+#     basket = Basket(request)
+#     basket.clear()
+#     return render(request, 'payment/orderplaced.html')
 
 
-class Error(TemplateView):
-    template_name = 'payment/error.html'
+# class Error(TemplateView):
+#     template_name = 'payment/error.html'
 
 
-# @login_required
-def BasketView(request, fk1):
+# # @login_required
+# def BasketView(request, fk1):
 
-    product=prodProduct.objects.all()
-    allBasket=Basket.objects.all()
-    person=Person.objects.filter(Email=request.session['Email'])
-    user=Person.objects.all()
-    basket = Basket(request)
-    total = str(basket.get_total_price(fk1))
-    total = total.replace('.', '')
-    total = int(total)
+#     product=prodProduct.objects.all()
+#     allBasket=Basket.objects.all()
+#     person=Person.objects.filter(Email=request.session['Email'])
+#     user=Person.objects.all()
+#     basket = Basket(request)
+#     total = str(basket.get_total_price(fk1))
+#     total = total.replace('.', '')
+#     total = int(total)
 
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    intent = stripe.PaymentIntent.create(
-        amount=total,
-        currency='myr',
-        metadata={'userid': request.user.id}
-    )
+#     stripe.api_key = settings.STRIPE_SECRET_KEY
+#     intent = stripe.PaymentIntent.create(
+#         amount=total,
+#         currency='myr',
+#         metadata={'userid': request.user.id}
+#     )
 
-    return render(request, 'payment/Payment.html', {'client_secret': intent.client_secret, 'basket':allBasket, 'product':product, 'person':person, 'user':user,
-                                                            'STRIPE_PUBLISHABLE_KEY': os.environ.get('STRIPE_PUBLISHABLE_KEY')})
+#     return render(request, 'payment/Payment.html', {'client_secret': intent.client_secret, 'basket':allBasket, 'product':product, 'person':person, 'user':user,
+#                                                             'STRIPE_PUBLISHABLE_KEY': os.environ.get('STRIPE_PUBLISHABLE_KEY')})
 
-@csrf_exempt
-def stripe_webhook(request):
-    payload = request.body
-    event = None
+# @csrf_exempt
+# def stripe_webhook(request):
+#     payload = request.body
+#     event = None
 
-    try:
-        event = stripe.Event.construct_from(
-            json.loads(payload), stripe.api_key
-        )
-    except ValueError as e:
-        print(e)
-        return HttpResponse(status=400)
+#     try:
+#         event = stripe.Event.construct_from(
+#             json.loads(payload), stripe.api_key
+#         )
+#     except ValueError as e:
+#         print(e)
+#         return HttpResponse(status=400)
 
 
 #BASKET VIEW
@@ -855,51 +855,6 @@ def stripe_webhook(request):
 #     allBasket = Basket.objects.filter(Person_fk_id=person.id)
 #     print(allBasket)
 #     return render(request, 'summary.html', {'allBasket': allBasket})
-    
-def summary(request):
-    try:
-        product=prodProduct.objects.all()
-        person=Person.objects.get(Email=request.session['Email'])
-        user=Person.objects.all()
-        allBasket = Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0)
-        
-        total = 0
-        
-        for x in allBasket:
-            total += x.productid.productPrice * x.productqty
-        context = {
-            'allBasket': allBasket,
-            'product': product,
-            'person': person,
-            'user': user,
-            'total':total
-        }
-        return render(request,'summary.html', context)
-    except prodProduct.DoesNotExist:
-        raise Http404('Data does not exist')
-
-#HISTORY VIEW
-def history(request):
-    try:
-        product=prodProduct.objects.all()
-        person=Person.objects.get(Email=request.session['Email'])
-        user=Person.objects.all()
-        allBasket = Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=1)
-        context = {
-            'allBasket': allBasket,
-            'product': product,
-            'person': person,
-            'user': user,
-        }
-        return render(request,'history.html', context)
-    except prodProduct.DoesNotExist:
-        raise Http404('Data does not exist')
-
-def invoice(request,fk1):
-    ids = Basket.objects.get(id=fk1)
-    basket = Basket.objects.all().filter(transaction_code=ids.transaction_code)
-    order = Order.objects.get(transaction_code=ids.transaction_code)
-    return render(request,'invoice.html',{'basket':basket,'order':order})   
 
 #PAYMENT VIEW
 def pay(request):
@@ -931,7 +886,51 @@ def pay(request):
     Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0).update(is_checkout=1,transaction_code=tcode)
     return redirect('history')
 
+def history(request):
+    try:
+        product=prodProduct.objects.all()
+        person=Person.objects.get(Email=request.session['Email'])
+        user=Person.objects.all()
+        allBasket = Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=1)
+        context = {
+            'allBasket': allBasket,
+            'product': product,
+            'person': person,
+            'user': user,
+        }
+        return render(request,'history.html', context)
+    except prodProduct.DoesNotExist:
+        raise Http404('Data does not exist')
+
+def invoice(request,fk1):
+    ids = Basket.objects.get(id=fk1)
+    basket = Basket.objects.all().filter(transaction_code=ids.transaction_code)
+    order = Order.objects.get(transaction_code=ids.transaction_code)
+    return render(request,'invoice.html',{'basket':basket,'order':order})   
+
 #BASKET VIEW
+def summary(request):
+    try:
+        product=prodProduct.objects.all()
+        person=Person.objects.get(Email=request.session['Email'])
+        user=Person.objects.all()
+        allBasket = Basket.objects.all().filter(Person_fk_id=person.id,is_checkout=0)
+        
+        total = 0
+        
+        for x in allBasket:
+            total += x.productid.productPrice * x.productqty
+        context = {
+            'allBasket': allBasket,
+            'product': product,
+            'person': person,
+            'user': user,
+            'total':total
+        }
+        return render(request,'summary.html', context)
+    except prodProduct.DoesNotExist:
+        raise Http404('Data does not exist')
+
 def remove_basket_qty(request):
     request.POST['item_id']
     obj = Basket.objects.get(id=request.POST['item_id'])
@@ -953,7 +952,6 @@ def add_basket_qty(request):
     return HttpResponse(json.dumps(response),content_type='application/json')
 
 def buy_now(request, fk1,fk2):
-    # basket = Basket(request)
     product = prodProduct.objects.get(pk=fk1)
     user = Person.objects.get(pk=fk2)
     if request.method=='POST':
@@ -993,14 +991,3 @@ def basket_delete(request):
     obj.delete()
     response = {'status':1,'message':'ok'}
     return HttpResponse(json.dumps(response),content_type='application/json')
-# def basket_update(request):
-#     basket = Basket(request)
-#     if request.POST.get('action') == 'post':
-#         product_id = int(request.POST.get('productid'))
-#         product_qty = int(request.POST.get('productqty'))
-#         basket.update(product=product_id, qty=product_qty)
-
-#         basketqty = basket.__len__()
-#         basketsubtotal = basket.get_subtotal_price()
-#         response = JsonResponse({'qty': basketqty, 'subtotal': basketsubtotal})
-#         return response

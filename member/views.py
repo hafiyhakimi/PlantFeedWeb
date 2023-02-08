@@ -235,7 +235,7 @@ def UserReg(request):
         messages.success(request,'The new user ' + Username + " is save succesfully..!")
         if UserLevel == "admin":
             return render(request,'login.html')
-        return render(request,'Topic.html',{'person' : person, 'approvedTopic': approvedTopic})
+        return render(request,'login.html',{'person' : person, 'approvedTopic': approvedTopic})
     else :
         return render(request,'registration.html')
 

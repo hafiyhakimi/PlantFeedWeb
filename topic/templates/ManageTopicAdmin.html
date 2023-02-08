@@ -43,7 +43,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3">
-        <form action="{% url 'topic:Managetopic' %}" method="POST" class="center">
+        <form action="{% url 'Managetopic' %}" method="POST" class="center">
           {% csrf_token %}
           <input type="hidden" name="status" value="Add">
           <input type="text" class="" name="topicName" placeholder="Topic Name">
@@ -62,7 +62,7 @@
           </thead>
           <tbody>
             
-            <form action="{% url 'topic:Managetopic' %}" method="POST" class="center">
+            <form action="{% url 'Managetopic' %}" method="POST" class="center">
               {% csrf_token %}
               {% for topics in topics %}
               <tr>
@@ -90,7 +90,7 @@
           </thead>
           <tbody>
             
-            <form action="{% url 'topic:Managetopic' %}" method="POST" class="center">
+            <form action="{% url 'Managetopic' %}" method="POST" class="center">
               {% csrf_token %}
               {% for suggestT in suggestT %}
               <tr>

@@ -15,6 +15,12 @@ from rest_framework.authtoken.views import obtain_auth_token
 from member.api import UserAuthentication, UserList
 from .import views
 from .import api
+# from group.models import createAdminGroupSharing
+# from group.models import createMemberGroupSharing
+# from group.models import updateAdminGroupSharing
+# from group.models import updateMemberGroupSharing
+# from group.models import deleteAdminGroupSharing
+# from group.models import deleteMemberGroupSharing
 
 
 urlpatterns = [
@@ -44,14 +50,24 @@ urlpatterns = [
     path('MyGroup.html',views.myGroup, name="MyGroup"),
     path('CreategroupAdmin.html',views.GroupAdmin, name="GroupAdmin"),
     #path('CreategroupAdmin.html',views.GroupAdmin, name="GroupAdmin"),
-    path('EditGroup.html/<str:fk1>/<str:fk>/',views.updateGroup, name="EditGroup"),
+    # path('EditGroup.html/<str:fk1>/<str:fk>/',views.updateGroup, name="EditGroup"),
+    path('EditGroup.html/<str:fk1>/<str:fk>/',views.updateAdminGroup, name="EditAdminGroup"),
+    path('EditGroup.html/<str:fk1>/<str:fk>/',views.updateMemberGroup, name="EditMemberGroup"),
     #path('EditGroup.html',views.ViewEditGroup, name="ViewEditGroup"),
     #url(r'^world/(?P<world_pk>\d+)/(?P<country_pk>\d+)/$'
     
-    path('AddGroupSharing.html/<str:fk1>/<str:fk3>/', views.GSharing, name="GSharing"),
+    # path('AddGroupSharing.html/<str:fk1>/<str:fk3>/', views.GSharing, name="GSharing"),
+    path('AddGroupSharing.html/<str:fk2>/<str:fk3>/', views.create_group_sharing, name="create_group_sharing"),
+    path('AddGroupSharing.html/<str:fk2>/<str:fk3>/', views.NormalGroupMember.createMemberGroupSharing, name='createMemberGroupSharing'),
+    path('AddGroupSharing.html/<str:fk2>/<str:fk3>/', views.AdminGroupMember.createAdminGroupSharing, name='createAdminGroupSharing'),
     path('ViewGroupSharing.html/<str:fk1>/', views.ViewGroupSharing, name="ViewGroupSharing"),
-    path('EditGroupSharing.html/<str:fk1>/',views.updateGroupSharing, name="UpdateGroupSharing"),
-    path('DeleteGroupSharing.html/<str:fk1>/', views.deleteGroupSharing, name="DeleteGroupSharing"),
+    path('EditGroupSharing.html/<str:fk1>/', views.update_group_sharing, name='update_group_sharing'),
+    path('EditGroupSharing.html/<str:fk1>/', views.NormalGroupMember.updateMemberGroupSharing, name='updateMemberGroupSharing'),
+    path('EditGroupSharing.html/<str:fk1>/', views.AdminGroupMember.updateAdminGroupSharing, name='updateAdminGroupSharing'),
+    path('DeleteGroupSharing.html/<str:fk1>/', views.delete_group_sharing, name='delete_group_sharing'),
+    path('DeleteGroupSharing.html/<str:fk1>/', views.NormalGroupMember.deleteMemberGroupSharing, name='deleteMemberGroupSharing'),
+    path('DeleteGroupSharing.html/<str:fk1>/', views.AdminGroupMember.deleteAdminGroupSharing, name='deleteAdminGroupSharing'),
+    # path('DeleteGroupSharing.html/<str:fk1>/', views.deleteGroupSharing, name="DeleteGroupSharing"),
     
     path('MainMarketplace.html',views.mainMarketplace, name="MainMarketplace"),
     path('SellProduct.html/<str:fk1>/',views.sellProduct, name="SellProduct"),

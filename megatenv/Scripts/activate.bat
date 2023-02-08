@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Megat\Desktop\PlantFeedWeb\megatenv
+set VIRTUAL_ENV=C:\Users\Megat\Documents\GitHub\PlantFeedWeb\megatenv
 
 if not defined PROMPT set PROMPT=$P$G
 

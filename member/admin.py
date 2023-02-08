@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 
 from member.views import group, workshop
-from topic.models import Topic
+# from topic.models import Topic
 from .models import Person
 from .models import Feed
 from group.models import Group
@@ -18,7 +18,7 @@ admin.site.register(Person)
 admin.site.register(Member)
 admin.site.register(SensorData)
 admin.site.register(Plants)
-admin.site.register(Topic)
+# admin.site.register(Topic)
 
 # Register your models here.
 #admin.site.register(Person)

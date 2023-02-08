@@ -1,7 +1,7 @@
 
 from django.urls import path
 from django.urls import re_path as url, include
-
+from . import views
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -32,12 +32,6 @@ urlpatterns = [
     path('Loginpage', views.loginpage, name="Loginpage"),
     path('Logout',views.logout, name="Logout"),
     path('View',views.view,name="View"),
-
-    path('selectTopic',views.selectTopic,name="selectTopic"),
-    path('viewSelectedTopic',views.viewSelectedTopic,name="viewSelectedTopic"),
-    path('updateSelectedTopic',views.updateSelectedTopic,name="updateSelectedTopic"),
-    path('suggestNewTopic',views.suggestNewTopic,name="suggestNewTopic"),
-    path('Managetopic', views.managetopic, name="Managetopic"),
  
     path('MainSharing.html',views.mainSharing, name="MainSharing"),
     path('sharing.html/<str:fk1>/',views.sharing, name="Sharing"),
@@ -45,6 +39,12 @@ urlpatterns = [
     path('ViewSharing.html/<str:fk1>/',views.updateSharing, name="UpdateSharing"),
     path('DeleteSharing.html/<str:fk1>/', views.deleteSharing, name="DeleteSharing"),
    
+    # path('selectTopic',views.selectTopic,name="selectTopic"),
+    # path('viewSelectedTopic',views.viewSelectedTopic,name="viewSelectedTopic"),
+    # path('updateSelectedTopic',views.updateSelectedTopic,name="updateSelectedTopic"),
+    # path('suggestNewTopic',views.suggestNewTopic,name="suggestNewTopic"),
+    path('ManageTopicAdmin.html', views.Managetopic, name="Managetopic"),
+    
     path('MainGroup.html',views.mainGroup, name="MainGroup"),
     path('group.html/<str:fk1>/',views.group, name="Group"),
     path('MyGroup.html',views.myGroup, name="MyGroup"),

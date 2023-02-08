@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Megat\Desktop\PlantFeedWeb\megatenv"
+VIRTUAL_ENV="C:\Users\Megat\Documents\GitHub\PlantFeedWeb\megatenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

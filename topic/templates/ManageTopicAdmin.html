@@ -37,77 +37,77 @@
        </li>
     </ul>
   </div>
-<br/>
-<br/>
-<br/>
-<div class="container">
-  <div class="row">
-    <div class="col-md-3">
-      <form action="{% url 'Managetopic' %}" method="POST" class="center">
-        {% csrf_token %}
-        <input type="hidden" name="status" value="Add">
-        <input type="text" class="" name="topicName" placeholder="Topic Name">
-        <button type="submit" class="btn btn-success">Add Topic</button>
-      </form>
+  <br/>
+  <br/>
+  <br/>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <form action="{% url 'Managetopic' %}" method="POST" class="center">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="Add">
+          <input type="text" class="" name="topicName" placeholder="Topic Name">
+          <button type="submit" class="btn btn-success">Add Topic</button>
+        </form>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <table class="table caption-top">
-        <thead>
-          <tr>
-            <th scope="col">Topic Name</th>
-            <th scope="col">Status</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <form action="{% url 'Managetopic' %}" method="POST" class="center">
-            {% csrf_token %}
-            {% for topics in topics %}
+    <div class="row">
+      <table class="table caption-top">
+          <thead>
             <tr>
-              <th scope="row" value="{{ topics.TopicName }}">{{ topics.TopicName }}<input type="hidden" value="{{ topics.TopicName }}" name="topicName"></th>
-              <th scope="row">Approved<input type="hidden" value="Delete" name="status"></th>
-              <th scope="row">
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </th>
-            </tr> 
-            {% endfor %}
+              <th scope="col">Topic Name</th>
+              <th scope="col">Status</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
             
-          </form>
-        </tbody>
-      </table>
-  </div>
-  <div class="row">
-    <table class="table caption-top">
-        <thead>
-          <tr>
-            <th scope="col">Topic Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Approval</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <form action="{% url 'Managetopic' %}" method="POST" class="center">
-            {% csrf_token %}
-            {% for suggestT in suggestT %}
+            <form action="{% url 'Managetopic' %}" method="POST" class="center">
+              {% csrf_token %}
+              {% for topics in topics %}
+              <tr>
+                <th scope="row" value="{{ topics.TopicName }}">{{ topics.TopicName }}<input type="hidden" value="{{ topics.TopicName }}" name="topicName"></th>
+                <th scope="row">Approved<input type="hidden" value="Delete" name="status"></th>
+                <th scope="row">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </th>
+              </tr> 
+              {% endfor %}
+              
+            </form>
+          </tbody>
+        </table>
+    </div>
+    <div class="row">
+      <table class="table caption-top">
+          <thead>
             <tr>
-              <th scope="row" value="{{ suggestT.TopicName }}">{{ suggestT.TopicName }}<input type="hidden" value="{{ suggestT.TopicName }}" name="topicName"></th>
-              <th scope="row" value="{{ suggestT.Approval }}">{{ suggestT.Approval }}</th>
-              <th scope="row">
-                <input type="radio" name="status" value="Approve">Approve
-                <input type="radio" name="status" value="Reject">Reject
-              </th><th><button type="submit" class="btn btn-success">Update Topic</button></th>
-            </tr> 
-            {% endfor %}
-            <tr></tr>
+              <th scope="col">Topic Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">Approval</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
             
-          </form>
-        </tbody>
-      </table>
-  </div>
-</div> 
-<hr/>
-</html>
+            <form action="{% url 'Managetopic' %}" method="POST" class="center">
+              {% csrf_token %}
+              {% for suggestT in suggestT %}
+              <tr>
+                <th scope="row" value="{{ suggestT.TopicName }}">{{ suggestT.TopicName }}<input type="hidden" value="{{ suggestT.TopicName }}" name="topicName"></th>
+                <th scope="row" value="{{ suggestT.Approval }}">{{ suggestT.Approval }}</th>
+                <th scope="row">
+                  <input type="radio" name="status" value="Approve">Approve
+                  <input type="radio" name="status" value="Reject">Reject
+                </th><th><button type="submit" class="btn btn-success">Update Topic</button></th>
+              </tr> 
+              {% endfor %}
+              <tr></tr>
+              
+            </form>
+          </tbody>
+        </table>
+    </div>
+  </div> 
+  <hr/>
+  </html>

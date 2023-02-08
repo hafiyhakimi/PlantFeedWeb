@@ -34,28 +34,27 @@
  </head>
  
    
-
-   <body>
-   <p class="h2 text-center align-content: center;">Topics</p>
-   <hr/>
-   <br/>
-   
+ <body>
+  <p class="h2 text-center align-content: center;">Topics</p>
+  <hr/>
+  <br/>
+  
 <form method="POST" class="container text-center" action="{% url 'selectTopic' %}">
-  {% csrf_token %}
-  {% for approvedTopic in approvedTopic %}
-    <div class="form-group">
-      <div class="form-row">
-        <div class="col mx-auto">
-          <input type="checkbox" class="btn-check d-none" name="topic" value="{{ approvedTopic.TopicName }}" id="btn-check{{forloop.counter}}" autocomplete="off">
-          <label class="btn btn" for="btn-check{{forloop.counter}}">{{ approvedTopic.TopicName }}</label>
-        </div>
-      </div>
-    </div>
-  {% endfor %}
-  <input type="hidden" name="Email" value="{{ person.Email }}">
-  <button type="submit" class="btn btn-primary">Submit</button>
+ {% csrf_token %}
+ {% for approvedTopic in approvedTopic %}
+   <div class="form-group">
+     <div class="form-row">
+       <div class="col mx-auto">
+         <input type="checkbox" class="btn-check d-none" name="topic" value="{{ approvedTopic.TopicName }}" id="btn-check{{forloop.counter}}" autocomplete="off">
+         <label class="btn btn" for="btn-check{{forloop.counter}}">{{ approvedTopic.TopicName }}</label>
+       </div>
+     </div>
+   </div>
+ {% endfor %}
+ <input type="hidden" name="Email" value="{{ person.Email }}">
+ <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 </body>
-</html>
 
+</html>

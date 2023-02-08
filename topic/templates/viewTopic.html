@@ -38,7 +38,7 @@
    <p class="h2 text-center align-content: center;">Topics</p>
    <hr/>
    <br/>
-   <form method="POST" class="container text-center" action="{% url 'updateSelectedTopic' %}">
+   <form method="POST" class="container text-center" action="{% url 'topic:updateSelectedTopic' %}">
     {% csrf_token %}
     <div class="form-group">
       <div class="form-row">
@@ -55,7 +55,7 @@
     <input type="hidden" name="Email" value="{{ person.Email }}">
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
-  <form method="POST" class="container text-center mt-5" action="{% url 'suggestNewTopic' %}">
+  <form method="POST" class="container text-center mt-5" action="{% url 'topic:suggestNewTopic' %}">
     {% csrf_token %}
     <input type="text" name="topicsuggest" value="">
     <button type="submit" class="btn btn-primary">Suggest New Topic</button>

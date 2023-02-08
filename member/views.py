@@ -470,10 +470,10 @@ def mainGroup(request):
         group=Group.objects.all()
         person = Person.objects.all()
         user = Person.objects.filter(Email=request.session['Email'])
-        member = GroupMember.objects.all()
+        # member = GroupMember.objects.all()
 
         #feed = Feed.objects.all()
-        return render(request,'MainGroup.html',{'group':group, 'person':person, 'user':user, 'member':member})
+        return render(request,'MainGroup.html',{'group':group, 'person':person, 'user':user})
     except Group.DoesNotExist:
         raise Http404('Data does not exist')
 
@@ -488,6 +488,7 @@ def group(request, fk1):
     #person_fk = Person.objects.filter()
     group=Group.objects.all()
     user = Person.objects.filter(Email=request.session['Email'])
+    # member = GroupMember.objects.all()
     person = Person.objects.get(pk=fk1)
     if request.method=='POST':
         p = Person.objects.get(pk=fk1)
@@ -510,7 +511,25 @@ def myGroup(request):
     except Group.DoesNotExist:
        raise Http404('Data does not exist')
 
-def updateGroup(request, fk1, fk):
+# def updateGroup(request, fk1, fk):
+#     #group = Group.objects.filter(Name=request.session['GName'])
+#     user = Person.objects.filter(Email=request.session['Email'])
+#     g = Group.objects.get(pk=fk1)
+#     person = Person.objects.filter(Email=request.session['Email'])
+#     gmember = GroupMember.objects.all()
+#     group = Group.objects.all()
+#     if request.method=='POST':
+#         t = Group.objects.get(pk=fk1)
+#         f = Person.objects.get(pk=fk)
+#         #GUsername = request.POST.get('Username')
+#         GroupMember(Username=f.Username, Group_fk=t, Person_fk=f).save(),
+#         messages="Your username is successfully added"
+#         return redirect('../../../MainGroup.html', {'group':group, 'person':person, 'gmember':gmember,'user':user, 'g':g})
+
+#     else:
+#         return render(request, 'EditGroup.html', {'group':group, 'person':person, 'user':user, 'g':g})
+    
+def updateAdminGroup(request, fk1, fk):
     #group = Group.objects.filter(Name=request.session['GName'])
     user = Person.objects.filter(Email=request.session['Email'])
     g = Group.objects.get(pk=fk1)
@@ -520,34 +539,82 @@ def updateGroup(request, fk1, fk):
     if request.method=='POST':
         t = Group.objects.get(pk=fk1)
         f = Person.objects.get(pk=fk)
+        admin = 1
         #GUsername = request.POST.get('Username')
-        GroupMember(Username=f.Username, Group_fk=t, Person_fk=f).save(),
+        GroupMember(Username=f.Username, Group_fk=t, Person_fk=f, Userlevel=admin).save(),
         messages="Your username is successfully added"
         return redirect('../../../MainGroup.html', {'group':group, 'person':person, 'gmember':gmember,'user':user, 'g':g})
-
+    else:
+        return render(request, 'EditGroup.html', {'group':group, 'person':person, 'user':user, 'g':g})
+    
+def updateMemberGroup(request, fk1, fk):
+    #group = Group.objects.filter(Name=request.session['GName'])
+    user = Person.objects.filter(Email=request.session['Email'])
+    g = Group.objects.get(pk=fk1)
+    person = Person.objects.filter(Email=request.session['Email'])
+    gmember = GroupMember.objects.all()
+    group = Group.objects.all()
+    if request.method=='POST':
+        t = Group.objects.get(pk=fk1)
+        f = Person.objects.get(pk=fk)
+        member = 0
+        #GUsername = request.POST.get('Username')
+        GroupMember(Username=f.Username, Group_fk=t, Person_fk=f, Userlevel=member).save(),
+        messages="Your username is successfully added"
+        return redirect('../../../MainGroup.html', {'group':group, 'person':person, 'gmember':gmember,'user':user, 'g':g})
     else:
         return render(request, 'EditGroup.html', {'group':group, 'person':person, 'user':user, 'g':g})
 
-def GSharing(request, fk1,fk3):
-    group = Group.objects.get(pk=fk3)
-    person = Person.objects.filter(Email=request.session['Email'])
-    sharing = GroupSharing.objects.all()
-    user = Person.objects.all()
-    gr = Group.objects.all()
-    if request.method=='POST':
-        p = Person.objects.get(pk=fk1)
-        g = Group.objects.get(pk=fk3)
-        GTitle=request.POST.get('GTitle')
-        GMessage=request.POST.get('GMessage')
-        GPhoto=request.POST.get('GPhoto')
-        GVideo=request.POST.get('GVideo')
+# def GSharing(request, fk1,fk3):
+#     group = Group.objects.get(pk=fk3)
+#     person = Person.objects.filter(Email=request.session['Email'])
+#     sharing = GroupSharing.objects.all()
+#     user = Person.objects.all()
+#     gr = Group.objects.all()
+#     if request.method=='POST':
+#         p = Person.objects.get(pk=fk1)
+#         g = Group.objects.get(pk=fk3)
+#         GTitle=request.POST.get('GTitle')
+#         GMessage=request.POST.get('GMessage')
+#         GPhoto=request.POST.get('GPhoto')
+#         GVideo=request.POST.get('GVideo')
         
-        GroupSharing(GTitle=GTitle,GMessage=GMessage,GPhoto=GPhoto,GVideo=GVideo,Person_fk=p, Group_fk=g).save(),
-        messages='The new feed' + request.POST['GTitle'] + "is save succesfully..!"
-        return render(request,'homepage.html',{'group':gr, 'person':user, 'user':person, "mssgs":messages})
-    else :
-        return render(request,'AddGroupSharing.html',{'group':group, 'person':person, 'sharing':sharing})
+#         GroupSharing(GTitle=GTitle,GMessage=GMessage,GPhoto=GPhoto,GVideo=GVideo,Person_fk=p, Group_fk=g).save(),
+#         messages='The new feed' + request.POST['GTitle'] + "is save succesfully..!"
+#         return render(request,'homepage.html',{'group':gr, 'person':user, 'user':person, "mssgs":messages})
+#     else :
+#         return render(request,'AddGroupSharing.html',{'group':group, 'person':person, 'sharing':sharing})
 
+def create_group_sharing(request, fk2, fk3):
+    group_member_factory = GroupMemberFactory()
+    person = Person.objects.filter(Email=request.session['Email']).first()
+    group_member = GroupMember.objects.get(Person_fk=person)
+    # group_member = group_member_factory.create_group_member(group_member.Userlevel)
+    if group_member.Userlevel == 1:
+        return AdminGroupMember.createAdminGroupSharing(request, fk2, fk3)
+    else:
+        return NormalGroupMember.createMemberGroupSharing(request, fk2, fk3)
+    
+def update_group_sharing(request, fk1):
+    group_member_factory = GroupMemberFactory()
+    person = Person.objects.filter(Email=request.session['Email']).first()
+    group_member = GroupMember.objects.get(Person_fk=person)
+    # group_member = group_member_factory.create_group_member(group_member.Userlevel)
+    if group_member.Userlevel == 1:
+        return AdminGroupMember.updateAdminGroupSharing(request, fk1)
+    else:
+        return NormalGroupMember.updateMemberGroupSharing(request, fk1)
+    
+def delete_group_sharing(request, fk1):
+    group_member_factory = GroupMemberFactory()
+    person = Person.objects.filter(Email=request.session['Email']).first()
+    group_member = GroupMember.objects.get(Person_fk=person)
+    # group_member = group_member_factory.create_group_member(group_member.Userlevel)
+    if group_member.Userlevel == 1:
+        return AdminGroupMember.deleteAdminGroupSharing(request, fk1)
+    else:
+        return NormalGroupMember.deleteMemberGroupSharing(request, fk1)
+    
 def AddGroupSharing(request, fk1):
     try:
         group = Group.objects.get(pk=fk1)
@@ -570,35 +637,162 @@ def ViewGroupSharing(request, fk1):
     except Group.DoesNotExist:
         raise Http404('Data does not exist')
 
-def deleteGroupSharing(request,fk1):
-    gsharing = GroupSharing.objects.get(pk=fk1)
-    if request.method=='POST':
-        gsharing.delete()
-        message='Group sharing is successfully deleted'
-        return redirect('../../Home',{'mssg':message})
-    context = {
-        "object" : workshop
-    }
-    return render(request, 'deleteGroupSharing.html', {'object':gsharing})
+# def deleteGroupSharing(request,fk1):
+#     gsharing = GroupSharing.objects.get(pk=fk1)
+#     if request.method=='POST':
+#         gsharing.delete()
+#         message='Group sharing is successfully deleted'
+#         return redirect('../../Home',{'mssg':message})
+#     context = {
+#         "object" : workshop
+#     }
+#     return render(request, 'deleteGroupSharing.html', {'object':gsharing})
+    
+class GroupMemberFactory:
+    def create_group_member(self, Userlevel):
+        if Userlevel == 1:
+            return AdminGroupMember()
+        else:
+            return NormalGroupMember()
 
-def updateGroupSharing(request, fk1):
-    sharing = GroupSharing.objects.get(pk=fk1)
-    if request.method=='POST':
-       f = sharing = GroupSharing.objects.get(pk=fk1)
-       f.GTitle=request.POST['GTitle']
-       f.GMessage=request.POST.get('GMessage')
-       f.GPhoto=request.POST.get('GPhoto')
-       f.GVideo=request.POST.get('GVideo')
-       #f.Graph=request.POST['Graph']
-       f.save()
-       return redirect('../../MainGroup.html')
+# class GroupMember:
+#     def __init__(self):
+#         self.factory = GroupMemberFactory()
+
+#     def create_member(self, userlevel):
+#         self.member = self.factory.create_group_member(userlevel)
+#         return self.member
+
+class NormalGroupMember:
+    def updateMemberGroupSharing(request, fk2):
+        sharing = GroupSharing.objects.get(id=fk2)
+        person = Person.objects.filter(Email=request.session['Email']).first()
+        groupmember = GroupMember.objects.filter(Person_fk=person)
+        if sharing.Person_fk == person or groupmember.Userlevel == 1:
+            if request.method == 'POST':
+                sharing.GTitle = request.POST.get('GTitle')
+                sharing.GMessage = request.POST.get('GMessage')
+                sharing.GPhoto = request.POST.get('GPhoto')
+                sharing.GVideo = request.POST.get('GVideo')
+                sharing.save()
+                messages.success(request, 'Sharing has been updated successfully!')
+                return redirect('../../MainGroup.html')
+            else:
+                return render(request, 'EditGroupSharing.html', {'sharing': sharing, 'person':person})
+        else:
+            messages.error(request, 'You are not authorized to update this sharing!')
+            return redirect('../../MainGroup.html')
+
+    def deleteMemberGroupSharing(request, fk2):
+        sharing1 = GroupSharing.objects.get(id=fk2)
+        person = Person.objects.filter(Email=request.session['Email']).first()
+        groupmember = GroupMember.objects.filter(Person_fk=person)
+        sharing = GroupSharing.objects.all()
+        if sharing1.Person_fk == person or groupmember.Userlevel == 1:
+            if request.method == 'POST':
+                sharing1.delete()
+                messages.success(request, 'Sharing has been deleted successfully!')
+                return redirect('../../MainGroup.html')
+            else:
+                return render(request, 'deleteGroupSharing.html', {'sharing1': sharing1, 'person':person, 'sharing':sharing})
+        else:
+            messages.error(request, 'You are not authorized to delete this sharing!')
+            return redirect('../../MainGroup.html')
+        
+    def createMemberGroupSharing(request, fk2,fk3):
+        group = Group.objects.get(pk=fk3)
+        person = Person.objects.filter(Email=request.session['Email'])
+        sharing = GroupSharing.objects.all()
+        user = Person.objects.all()
+        gr = Group.objects.all()
+        if request.method=='POST':
+            p = Person.objects.get(pk=fk2)
+            g = Group.objects.get(pk=fk3)
+            GTitle=request.POST.get('GTitle')
+            GMessage=request.POST.get('GMessage')
+            GPhoto=request.POST.get('GPhoto')
+            GVideo=request.POST.get('GVideo')
+            member = 0
+            
+            GroupSharing(GTitle=GTitle,GMessage=GMessage,GPhoto=GPhoto,GVideo=GVideo,Person_fk=p, Group_fk=g, Status=member).save(),
+            messages='The new feed' + request.POST['GTitle'] + "is save succesfully..!"
+            return render(request,'homepage.html',{'group':gr, 'person':user, 'user':person, "mssgs":messages})
+        else :
+            return render(request,'AddGroupSharing.html',{'group':group, 'person':person, 'sharing':sharing})    
+
+class AdminGroupMember:
+    def updateAdminGroupSharing(request, fk2):
+        sharing = GroupSharing.objects.get(id=fk2)
+        person = Person.objects.filter(Email=request.session['Email']).first()
+        # Check if the user is an admin
+        member = GroupMember.objects.get(Person_fk=person)
+        if member.Userlevel == 1 and sharing.Person_fk == person:
+            if request.method == 'POST':
+                sharing.GTitle = request.POST.get('GTitle')
+                sharing.GMessage = request.POST.get('GMessage')
+                sharing.GPhoto = request.POST.get('GPhoto')
+                sharing.GVideo = request.POST.get('GVideo')
+                sharing.save()
+                messages.success(request, 'Sharing has been updated successfully!')
+                return redirect('../../MainGroup.html')
+            else:
+                return render(request, 'UpdateGroupSharing.html', {'sharing': sharing, 'person':person})
+        else:
+            messages.error(request, 'You are not authorized to update this sharing')
+            return redirect('../../MainGroup.html')
+
+    def deleteAdminGroupSharing(request, fk2):
+        sharing1 = GroupSharing.objects.get(id=fk2)
+        person = Person.objects.filter(Email=request.session['Email']).first()
+        sharing = GroupSharing.objects.all()
+        # Check if the user is an admin
+        member = GroupMember.objects.get(Person_fk=person)
+        if member.Userlevel == 1 and sharing1.Person_fk == person:
+            if request.method == 'POST':
+                sharing1.delete()
+                messages.success(request, 'Sharing has been deleted successfully!')
+                return redirect('../../MainGroup.html')
+            else:
+                return render(request, 'deleteGroupSharing.html', {'sharing': sharing1, 'person':person, 'sharing':sharing})
+        else:
+            messages.error(request, 'You are not authorized to delete this sharing')
+            return redirect('../../MainGroup.html')
+        
+    def createAdminGroupSharing(request, fk1,fk3):
+        group = Group.objects.get(pk=fk3)
+        person = Person.objects.filter(Email=request.session['Email'])
+        sharing = GroupSharing.objects.all()
+        user = Person.objects.all()
+        gr = Group.objects.all()
+        if request.method=='POST':
+            p = Person.objects.get(pk=fk1)
+            g = Group.objects.get(pk=fk3)
+            GTitle=request.POST.get('GTitle')
+            GMessage=request.POST.get('GMessage')
+            GPhoto=request.POST.get('GPhoto')
+            GVideo=request.POST.get('GVideo')
+            admin = 1
+            
+            GroupSharing(GTitle=GTitle,GMessage=GMessage,GPhoto=GPhoto,GVideo=GVideo,Person_fk=p, Group_fk=g, Status=admin).save(),
+            messages='The new feed' + request.POST['GTitle'] + "is save succesfully..!"
+            return render(request,'homepage.html',{'group':gr, 'person':user, 'user':person, "mssgs":messages})
+        else :
+            return render(request,'AddGroupSharing.html',{'group':group, 'person':person, 'sharing':sharing})    
+
+# def updateGroupSharing(request, fk1):
+#     sharing = GroupSharing.objects.get(pk=fk1)
+#     if request.method=='POST':
+#        f = sharing = GroupSharing.objects.get(pk=fk1)
+#        f.GTitle=request.POST['GTitle']
+#        f.GMessage=request.POST.get('GMessage')
+#        f.GPhoto=request.POST.get('GPhoto')
+#        f.GVideo=request.POST.get('GVideo')
+#        #f.Graph=request.POST['Graph']
+#        f.save()
+#        return redirect('../../MainGroup.html')
        
-    else:
-        return render(request,'EditGroupSharing.html',{'sharing':sharing})
-
-
-
-
+#     else:
+#         return render(request,'EditGroupSharing.html',{'sharing':sharing})
 
 #member
 def mainMember(request):

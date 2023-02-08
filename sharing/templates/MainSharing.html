@@ -146,7 +146,7 @@
         
         {% if person.Username == sharing.Person_fk.Username%}
         <div class="btn-group">
-          <a value="Edit" href="{% url 'UpdateGroupSharing' sharing.id %}">
+          <a value="Edit" href="{% url 'update_group_sharing' sharing.id %}">
             <img src="../../media/edit.png" width="30" height="30"></a>
             <a value="Delete" href="{% url 'DeleteGroupSharing' sharing.id %}">
               <img src="../../media/delete.jpg" width="30" height="30"></a>

@@ -139,7 +139,7 @@ p{
           
       {% if g.GName == group.GName %}
       {% for person in person %}
-      <div class="m"><a href="{% url 'GSharing' person.id g.id %}" class="link-primary"><img src="../../media/add.png" width="30" height="30">Add Sharing</a> 
+      <div class="m"><a href="{% url 'create_group_sharing' person.id group.id %}" class="link-primary"><img src="../../media/add.png" width="30" height="30">Add Sharing</a> 
       </div><br>    
       <img src="../../media/{{ g.GProfile }}" width="700" height="400"><br><br>
       <b>Creator: </b> {{ g.Person_fk.Username }}
@@ -156,18 +156,19 @@ p{
        
 </div>
 {% endfor %}
-{% for person in person %}
 {% for sharing in sharing %}
+{% if sharing.Group_fk.GName == group.GName %}
 <div class="container my-3 bg-light">
   <div class=profileIcon>
     <img src="../../media/{{ sharing.Person_fk.Photo }}" width="40" height="40">
     <b>{{sharing.Person_fk.Username}}</b>>><b>{{sharing.Group_fk.GName}}</b>
     
-    {% if person.Username == sharing.Person_fk.Username%}
+    {% comment %} {% if person.Username == sharing.Person_fk.Username%} {% endcomment %}
+    {% if request.session.Email == sharing.Person_fk.Email or request.session.Email.Userlevel == 1 %}
     <div class="btn-group">
-      <a value="Edit" href="{% url 'UpdateGroupSharing' sharing.id %}">
+      <a value="Edit" href="{% url 'update_group_sharing' sharing.id %}">
         <img src="../../media/edit.png" width="30" height="30"></a>
-        <a value="Delete" href="{% url 'DeleteGroupSharing' sharing.id %}">
+        <a value="Delete" href="{% url 'delete_group_sharing' sharing.id %}">
           <img src="../../media/delete.jpg" width="30" height="30"></a>
           {% endif %}
     </div>
@@ -182,7 +183,7 @@ p{
   <th><img src="../../media/likes.png" width="50" height="50"> Likes</th>
   <th><img src="../../media/comments.png" width="50" height="50"> Comment</th>
   <th><img src="../../media/share.png" width="50" height="50"> Share</th>
-  {% endfor %}
+{% endif %}
 {% endfor %}
 </tr>
 </tbody>

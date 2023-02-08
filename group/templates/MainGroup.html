@@ -4,19 +4,19 @@
     window.location.href = "../../../ViewGroupSharing.html";
 </script>
 {% endif %}
+{% if mssg %}
 {% for group in group %}
 {% for user in user %}
 {% if group.Person_fk.Email == user.Email %}
-{% if mssg %}
 <script>
     alert('{{mssg}}');
     window.location.href = "../../../";
-    window.location.href = "{% url 'EditGroup' group.id user.id %}";
+    window.location.href = "{% url 'EditMemberGroup' group.id user.id %}";
 </script>
 {% endif %}
+{% endfor %}
+{% endfor %}
 {% endif %}
-{% endfor %}
-{% endfor %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -128,7 +128,7 @@
                     
                   
                     {% for user in user %}
-                    <a href="{% url 'EditGroup' group.id user.id %}" class="link-primary">
+                    <a href="{% url 'EditMemberGroup' group.id user.id %}" class="link-primary">
                       <img src="media/join.png" width="40" height="40"></a> 
                       {% endfor %}
                      
